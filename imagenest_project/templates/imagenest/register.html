@@ -4,6 +4,8 @@
 <!--* Form: -->
 {% block form_block %}
 
+
+
 {% for hidden in register_form.hidden_fields %}
 {{hidden}}
 {% endfor %}
@@ -14,6 +16,7 @@
 {{ field }}
 {% endfor %}
 
+
 {% endblock %}
 
 <!--* Submit button and message: -->
@@ -22,6 +25,5 @@
 {% endblock %}
 
 {% block redirect_message_block %}
-<p class="text-light">Registered before? <a href="{% url 'login' %}" class="text-light" role="button"
-        aria-disabled="true">Login</a></p>
+<p class="text-light">Registered before? <a href="/" class="text-light" role="button" aria-disabled="true">Login</a></p>
 {% endblock %}

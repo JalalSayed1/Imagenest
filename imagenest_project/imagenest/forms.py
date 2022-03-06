@@ -10,10 +10,14 @@ class LoginForm(forms.ModelForm):
     username = forms.CharField(
         #! could make max_length not hard coded: eg. Category.NAME_MAX_LENGTH
         max_length=15,
-        widget=forms.TextInput(attrs={"placeholder": "Username"}),
+        widget=forms.TextInput(
+            attrs={"placeholder": "Username", "class": "form-control"}
+        ),
     )
     password = forms.CharField(
-        widget=forms.PasswordInput(attrs={"placeholder": "Password"}),
+        widget=forms.PasswordInput(
+            attrs={"placeholder": "Password", "class": "form-control"}
+        ),
     )
 
     class Meta:
@@ -28,18 +32,26 @@ class RegisterForm(forms.ModelForm):
 
     firstname = forms.CharField(
         max_length=15,
-        widget=forms.TextInput(attrs={"placeholder": "First name"}),
+        widget=forms.TextInput(
+            attrs={"placeholder": "First name", "class": "form-control"}
+        ),
     )
     surname = forms.CharField(
         max_length=15,
-        widget=forms.TextInput(attrs={"placeholder": "Surename"}),
+        widget=forms.TextInput(
+            attrs={"placeholder": "Surename", "class": "form-control"}
+        ),
     )
     username = forms.CharField(
         max_length=15,
-        widget=forms.TextInput(attrs={"placeholder": "Username"}),
+        widget=forms.TextInput(
+            attrs={"placeholder": "Username", "class": "form-control"}
+        ),
     )
     password = forms.CharField(
-        widget=forms.PasswordInput(attrs={"placeholder": "Username"}),
+        widget=forms.PasswordInput(
+            attrs={"placeholder": "Username", "class": "form-control"}
+        ),
     )
 
     class Meta:
