@@ -1,0 +1,28 @@
+{% extends 'imagenest/first_page.html' %}
+{% load staticfiles %}
+
+<!--* Form: -->
+{% block form_block %}
+
+{% for hidden in login_form.hidden_fields %}
+{{hidden}}
+{% endfor %}
+
+{% for field in login_form.visible_fields %}
+{{ field.errors }}
+{{ field.help_text }}
+{{ field }}
+{% endfor %}
+<!-- <input class="form-control me-auto" type="text" placeholder="Username" aria-label="Type your Username">
+<input class="form-control me-auto" type="password" placeholder="Password" aria-label="Type your Password"> -->
+{% endblock %}
+
+<!--* Submit button and message: -->
+{% block primary_btn_block %}
+<button class="btn btn-primary" type="submit">Login</button>
+{% endblock %}
+
+{% block redirect_message_block %}
+<p class="text-light">Do not have an account? <a href="{% url 'register' %}" class="text-light" role="button"
+        aria-disabled="true">Register</a></p>
+{% endblock %}
