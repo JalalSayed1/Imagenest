@@ -29,5 +29,7 @@ urlpatterns = [
     path("imagenest/", include("imagenest.urls")),
     path("login/", views.login, name="login"),
     path("register/", views.register, name="register"),
-    # path("home/", views.home, name="home"),
+    path("home/", views.home, name="home"),
+    path("profile/", views.profile, name="profile"),
+    path("topimages/", views.top_images, name="top_images"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

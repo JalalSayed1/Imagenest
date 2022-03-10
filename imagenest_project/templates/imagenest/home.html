@@ -1,0 +1,15 @@
+{% extends 'imagenest/menu_pages_template.html' %}
+{% load staticfiles %}
+
+<!--* Head: -->
+<!-- empty space to give a specific message in login or register pages if needed: -->
+{% block page_title_block %}
+Home
+{% endblock %}
+
+
+<!--* Body: -->
+<!-- activate the correct corresponding tab in the menu: -->
+{% block activate_home_tab %}active{% endblock %}
+{% block activate_profile_tab %}{% endblock %}
+{% block activate_top_images_tab %}{% endblock %}

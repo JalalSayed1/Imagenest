@@ -51,5 +51,13 @@ def register(request):
 
 
 # @login_required
-# def home(request):
-#     return render(request, "imagenest/home.html")
+def home(request):
+    return render(request, "imagenest/home.html")
+
+
+def profile(request):
+    return render(request, "imagenest/profile.html")
+
+
+def top_images(request):
+    return render(request, "imagenest/top_images.html")

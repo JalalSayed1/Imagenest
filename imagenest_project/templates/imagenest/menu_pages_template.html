@@ -1,0 +1,64 @@
+{% extends 'imagenest/base.html' %}
+{% load staticfiles %}
+
+<!--* Head: -->
+<!-- empty space to give a specific message in login or register pages if needed: -->
+
+{% block title_block %}
+
+ImageNest -
+{% block page_title_block %}
+{% endblock %}
+
+{% endblock %}
+
+
+<!--* Body: -->
+{% block body_block %}
+<div id="body" class="w-75 position-absolute top-0 start-50 translate-middle mt-4">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <!-- hyper link to the current page -->
+        <a class="navbar-brand" href="./">
+            <img src="https://seeklogo.com/images/T/Temp-logo-AB919E2100-seeklogo.com.gif" width="30" height="30"
+                class="d-inline-block align-top" alt="">
+            Bootstrap
+        </a>
+
+        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button> -->
+
+        <div class="collapse navbar-collapse" id="headerMenu">
+            <div class="navbar-nav">
+
+                <a class="nav-item nav-link {% block activate_home_tab %}{% endblock %}"
+                    href="{% url 'home' %}">Home</a>
+                <a class="nav-item nav-link {% block activate_profile_tab %}{% endblock %}"
+                    href="{% url 'profile' %}">Profile</a>
+                <a class="nav-item nav-link {% block activate_top_images_tab %}{% endblock %}"
+                    href="{% url 'top_images' %}">Top
+                    images</a>
+                <a class="nav-item nav-link disabled" href="#">Log out</a>
+
+            </div>
+        </div>
+
+        <!-- Search function: -->
+        <div class="float-end">
+            <a href="#" class="btn btn-primary">Search</a>
+
+        </div>
+
+    </nav>
+
+    <!-- ! causing the menu to shift up again? -->
+    <div class="row">
+        <div class="col">1</div>
+        <div class="col">2</div>
+        <div class="col">3</div>
+    </div>
+
+</div>
+{% endblock %}
