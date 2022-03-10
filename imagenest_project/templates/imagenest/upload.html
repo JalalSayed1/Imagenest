@@ -1,0 +1,26 @@
+{% extends 'imagenest/base.html' %}
+{% load staticfiles %}
+
+<!--* Head: -->
+{% block page_title_block %}
+Upload picture
+{% endblock %}
+
+<!--* Form: -->
+{% block form_block %}
+<!-- space to add the image -->
+<!-- space to caption image -->
+<!-- space to add location -->
+{% endblock %}
+
+
+<!--* Submit button and message: -->
+{% block primary_btn_block %}
+<button class="btn btn-primary" type="submit">Upload</button>
+{% endblock %}
+
+<!-- user doesnt add an image-->
+{% block redirect_message_block %}
+<p class="text-light">Please add an image<a href="{% url 'upload' %}" class="text-light" role="button"
+                aria-disabled="true">Register</a></p>
+{% endblock %}

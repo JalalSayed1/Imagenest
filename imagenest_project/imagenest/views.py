@@ -61,3 +61,6 @@ def profile(request):
 
 def top_images(request):
     return render(request, "imagenest/top_images.html")
+    
+def upload(request):
+    return render(request, "imagenest/upload.html")
