@@ -20,8 +20,11 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 MEDIA_DIR = os.path.join(BASE_DIR, "media")
 
+# redirect users to this page if they are not logged in and want to access a restricted page
+LOGIN_URL = "imagenest:login"
+
 # redirect user after login to homepage:
-# LOGIN_REDIRECT_URL = os.path.join(BASE_DIR, "home")
+LOGIN_REDIRECT_URL = os.path.join(BASE_DIR, "home")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -44,7 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "imagenest",
+    "imagenest",  # our app
 ]
 
 MIDDLEWARE = [

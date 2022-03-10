@@ -16,11 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from imagenest import views
+from django.urls import include
+from django.conf.urls.static import static
+from django.conf import settings
+
+# app_name = "imagenest"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.login, name="login"),
+    # if we have a specific url to be handled by the app "imagenest", let it do so:
+    path("imagenest/", include("imagenest.urls")),
     path("login/", views.login, name="login"),
     path("register/", views.register, name="register"),
     # path("home/", views.home, name="home"),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
