@@ -62,3 +62,25 @@ class RegisterForm(forms.ModelForm):
             "username",
             "password",
         )
+        
+class uploadForm(forms.ModelForm):
+    #get username 
+    username =
+    #image upload
+    
+    
+    #required
+    caption = forms.CharField(
+        max_length=200,
+        widget = forms.TextInput(
+            attrs={"placeholder": "Caption", "class": "form-control"}            
+        )
+    )
+    
+    #not required
+    location = forms.CharField(
+        max_length = 25,
+        widgit = forms.TextInput(
+            attrs={"placeholder": "location", "class": "form-control"}            
+        )
+    )

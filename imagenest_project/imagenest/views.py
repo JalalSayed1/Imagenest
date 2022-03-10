@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from imagenest import views
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, uploadForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
@@ -63,4 +63,13 @@ def top_images(request):
     return render(request, "imagenest/top_images.html")
     
 def upload(request):
-    return render(request, "imagenest/upload.html")
+    form = uploadForm()
+    if request.method == 'POST':
+        form = uploadForm(request.POST)
+        if form.is_valid():
+            #if the upload form is complete, commit it to the database
+            form.save(commit=True)
+            return redirect('/profile/')
+        else:
+            print(form.errors)        
+    return render(request, "imagenest/upload.html", {'form':form})
