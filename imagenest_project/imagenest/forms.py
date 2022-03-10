@@ -65,7 +65,7 @@ class RegisterForm(forms.ModelForm):
         
 class uploadForm(forms.ModelForm):
     #get username 
-    username =
+    # username =
     #image upload
     
     
@@ -77,7 +77,7 @@ class uploadForm(forms.ModelForm):
     
     #not required
     location = forms.CharField(
-        max_length = 25,widgit = forms.TextInput(attrs={"placeholder": "location", "class": "form-control"})
+        max_length = 25, widget = forms.TextInput(attrs={"placeholder": "location", "class": "form-control"})
     )
     
     class Meta:
