@@ -26,8 +26,3 @@ Upload picture
 {% block primary_btn_block %}
 <button class="btn btn-primary" type="submit">Upload</button>
 {% endblock %}
-
-<!-- user doesnt add an image-->
-{% block redirect_message_block %}
-<p class="text-light">Please add an image<a href="{% url 'upload' %}" class="text-light" role="button" aria-disabled="true">Register</a></p>
-{% endblock %}
