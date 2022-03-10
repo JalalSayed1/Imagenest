@@ -1,0 +1,25 @@
+{% extends 'imagenest/base.html' %}
+{% load staticfiles %}
+
+<!--* Head: -->
+{% block page_title_block %}
+Upload picture
+{% endblock %}
+
+<!--* Form: -->
+{% block form_block %}
+<form id="uploadForm" method="post" action="login/upload/">
+	{% csrf_token %}
+	{% for field in form.visible_fields %}
+		{{ field.errors }}
+		{{ field.help_text }}
+		{{ field }}
+	{% endfor %}
+</form>
+{% endblock %}
+
+
+<!--* Submit button and message: -->
+{% block primary_btn_block %}
+<button class="btn btn-primary" type="submit">Upload</button>
+{% endblock %}
