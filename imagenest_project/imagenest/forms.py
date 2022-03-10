@@ -72,15 +72,18 @@ class uploadForm(forms.ModelForm):
     #required
     caption = forms.CharField(
         max_length=200,
-        widget = forms.TextInput(
-            attrs={"placeholder": "Caption", "class": "form-control"}            
-        )
+        widget = forms.TextInput(attrs={"placeholder": "Caption", "class": "form-control"})
     )
     
     #not required
     location = forms.CharField(
-        max_length = 25,
-        widgit = forms.TextInput(
-            attrs={"placeholder": "location", "class": "form-control"}            
-        )
+        max_length = 25,widgit = forms.TextInput(attrs={"placeholder": "location", "class": "form-control"})
     )
+    
+    class Meta:
+            model = User
+            fields = (
+                "username",
+                "caption",
+                "location",
+            )
