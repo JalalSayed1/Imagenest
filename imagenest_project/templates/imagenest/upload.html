@@ -10,9 +10,6 @@ Upload picture
 {% block form_block %}
 <form id="uploadForm" method="post" action="login/upload/">
 	{% csrf_token %}
-	{% for hidden in form.hidden_fields %}
-		{{ hidden }}
-	{% endfor %}
 	{% for field in form.visible_fields %}
 		{{ field.errors }}
 		{{ field.help_text }}
