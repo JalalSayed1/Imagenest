@@ -21,7 +21,7 @@ STATIC_DIR = os.path.join(BASE_DIR, "static")
 MEDIA_DIR = os.path.join(BASE_DIR, "media")
 
 # redirect users to this page if they are not logged in and want to access a restricted page
-LOGIN_URL = "imagenest:login"
+LOGIN_URL = "login"
 
 # redirect user after login to homepage:
 LOGIN_REDIRECT_URL = os.path.join(BASE_DIR, "home")

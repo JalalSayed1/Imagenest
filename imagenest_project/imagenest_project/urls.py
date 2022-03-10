@@ -32,4 +32,5 @@ urlpatterns = [
     path("home/", views.home, name="home"),
     path("profile/", views.profile, name="profile"),
     path("topimages/", views.top_images, name="top_images"),
+    path("search/", views.search, name="search"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
