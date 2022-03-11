@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from imagenest import views
 from .forms import LoginForm, RegisterForm, uploadForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from imagenest.models import Post
+from django.views import View
+from django.utils.decorators import method_decorator
 
 
 def login(request):
@@ -57,16 +60,29 @@ def home(request):
     image3 = {"url":"https://source.unsplash.com/random?cars", "username" :"username3", "likes" : 1, "likers" : ["usename13"]}
     
     images = {"image1" : image1, "image2" : image2, "image3" : image3}
+
+    #commented out to ease testing, but this should just be all the functionality for
+    #the basic display of the images, not sure if this will have to be changed for the
+    #uploaded ones
+    #image_list = Post.objects.all().order_by("-date_posted")
+    #images = {"images" : image_list}
     
     return render(request, "imagenest/home.html", {"images" : images })#{"image1" : image1 }
 
 # @login_required
 def profile(request):
+    #line just here to remind me that profile page will almost definitely involve .filter()
+    image_list = Post.objects.all().filter()
+    
     return render(request, "imagenest/profile.html")
 
 # @login_required
 def top_images(request):
-    return render(request, "imagenest/top_images.html")
+    image_list = Post.objects.all().order_by("-likes")[:10]
+    images = {"images" : image_list}
+
+    return render(request, 'imagenest/top_images.html', context=images)
+
 
 
 # @login_required
@@ -85,4 +101,35 @@ def upload(request):
         else:
             print(form.errors)        
     return render(request, "imagenest/upload.html", {'form':form})
+
+#this is taken from tango w/ django, dk if it actually works here, still needs url
+#mapping, html and ajax attached to it, uses the image url cos we have no form of
+#image id.
+class LikeImage(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        image_id = request.GET['url']
+
+        try:
+            image = Post.objects.get(id = image_id)
+        except Image.DoesNotExist:
+            return HttpResponse(-1)
+        except ValueError:
+            return HttpResponse(-1)
+
+        image.likes = image.likes + 1
+        image.save()
+
+        return HttpResponse(image.likes)
+
+  
+
+
+
+
+
+
+
+
+    
 
