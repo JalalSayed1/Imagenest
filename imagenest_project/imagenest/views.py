@@ -52,21 +52,31 @@ def register(request):
 # @login_required
 def home(request):
     #! how to get info from server and return them as a dict to template?
-    image1 = {"url":"https://source.unsplash.com/random?places", "username" :"username1", "likes" : 4, "likers" : ["usename11", "usename11", "usename11", "usename11"]}
-    image2 = {"url":"https://source.unsplash.com/random?library", "username" :"username2", "likes" : 2, "likers" : ["usename12", "usename12"]}
-    image3 = {"url":"https://source.unsplash.com/random?cars", "username" :"username3", "likes" : 1, "likers" : ["usename13"]}
+    image1 = {"url":"https://source.unsplash.com/random?places", "username" :"username1", "likes" : 4, "likers" : ["usename11", "usename11", "usename11", "usename11"], 'id':1}
+    image2 = {"url":"https://source.unsplash.com/random?library", "username" :"username2", "likes" : 2, "likers" : ["usename12", "usename12"], 'id':2}
+    image3 = {"url":"https://source.unsplash.com/random?cars", "username" :"username3", "likes" : 1, "likers" : ["usename13"], 'id':3}
     
     images = {"image1" : image1, "image2" : image2, "image3" : image3}
     
-    return render(request, "imagenest/home.html", {"images" : images })#{"image1" : image1 }
+    return render(request, "imagenest/home.html", {"images" : images })
 
 # @login_required
 def profile(request):
-    return render(request, "imagenest/profile.html")
+    image1 = {"url":"https://source.unsplash.com/random?places", "username" :"username1", "likes" : 2, "likers" : ["usename11", "usename11"], 'id':4}
+    
+    images = {"image1" : image1}
+    profile_image = {"url":"https://source.unsplash.com/250x250?person", "username" :"username1"}
+    
+    return render(request, "imagenest/profile.html", {"profile_image" : profile_image, "images" : images })
 
 # @login_required
 def top_images(request):
-    return render(request, "imagenest/top_images.html")
+    image1 = {"url":"https://source.unsplash.com/random?places", "username" :"username1", "likes" : 10, "likers" : ["usename11", "usename11", "usename11", "usename11","usename11","usename11","usename11","usename11","usename11","usename11"], 'id':5}
+    image2 = {"url":"https://source.unsplash.com/random?library", "username" :"username2", "likes" : 12, "likers" : ["usename12", "usename12","usename12","usename12","usename12","usename12","usename12","usename12","usename12","usename12","usename12","usename12"], 'id':6}
+    image3 = {"url":"https://source.unsplash.com/random?cars", "username" :"username3", "likes" : 15, "likers" : ["usename13","usename13","usename13","usename13","usename13","usename13","usename13","usename13","usename13","usename13","usename13","usename13","usename13","usename13","usename13"], 'id':7}
+    
+    images = {"image1" : image1, "image2" : image2, "image3" : image3}
+    return render(request, "imagenest/top_images.html",  {"images" : images })
 
 
 # @login_required

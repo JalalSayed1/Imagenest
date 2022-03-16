@@ -1,5 +1,27 @@
 *{
     margin: 0;
-	padding: 0;
-	box-sizing: border-box;
+    padding: 0;
+    box-sizing: border-box;
 }
+
+.circle-img {
+  width: 250px;
+  height: 250px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.circle-img img {
+  transform: translateX(-50%);
+  margin-left: 50%;
+}
+
+.black_and_white{
+    filter: grayscale(100%);
+}
+
+.black_and_white:hover{
+    filter: grayscale(0%);
+    transition: 500ms;
+}
+

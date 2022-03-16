@@ -59,6 +59,11 @@ ImageNest -
     <div class="row w-100 mx-auto my-4 h-auto">
         <!-- ! to delete and replace by a for loop: -->
 
+        <div class="row">
+                {% block profile_image %}
+                {% endblock %}
+        </div>
+
         {% for image in images.values %}
 
         <div class="row">
@@ -82,8 +87,9 @@ ImageNest -
 
                 <!-- Like button and text row inside image column: -->
                 <div class="row py-2">
-                    <div class="col-1">
-                       <a class="text-decoration-none" href="">👍</a> 
+                    <!-- each image has a unique id: -->
+                    <div id="likeBtn{{ image.id }}" class="col-1 black_and_white">
+                       <button type="button" class="btn btn-link lead text-decoration-none" onclick="like('{{ image.id }}')">👍</button>
                     </div>
                     <!-- number of likes and usernames: -->
                     <div class="col-6 w-auto ">
