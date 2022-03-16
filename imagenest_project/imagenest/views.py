@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from imagenest import views
 from .forms import LoginForm, RegisterForm, uploadForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from imagenest.models import Post
+from django.views import View
+from django.utils.decorators import method_decorator
 
 
 def login(request):
@@ -57,27 +60,39 @@ def home(request):
     image3 = {"url":"https://source.unsplash.com/random?cars", "username" :"username3", "likes" : 1, "likers" : ["usename13"], 'id':3}
     
     images = {"image1" : image1, "image2" : image2, "image3" : image3}
+
+    #commented out to ease testing, but this should just be all the functionality for
+    #the basic display of the images, not sure if this will have to be changed for the
+    #uploaded ones
+    #image_list = Post.objects.all().order_by("-date_posted")
+    #images = {"images" : image_list}
     
     return render(request, "imagenest/home.html", {"images" : images })
 
 # @login_required
 def profile(request):
+    
+    #line just here to remind me that profile page will almost definitely involve .filter()
+    image_list = Post.objects.all().filter()
+    
     image1 = {"url":"https://source.unsplash.com/random?places", "username" :"username1", "likes" : 2, "likers" : ["usename11", "usename11"], 'id':4}
     
     images = {"image1" : image1}
-    profile_image = {"url":"https://source.unsplash.com/250x250?person", "username" :"username1"}
+    profile_image = {"url":"https://source.unsplash.com/250x250?person", "username" :"username1", 'id' : 8}
     
     return render(request, "imagenest/profile.html", {"profile_image" : profile_image, "images" : images })
 
 # @login_required
 def top_images(request):
-    image1 = {"url":"https://source.unsplash.com/random?places", "username" :"username1", "likes" : 10, "likers" : ["usename11", "usename11", "usename11", "usename11","usename11","usename11","usename11","usename11","usename11","usename11"], 'id':5}
-    image2 = {"url":"https://source.unsplash.com/random?library", "username" :"username2", "likes" : 12, "likers" : ["usename12", "usename12","usename12","usename12","usename12","usename12","usename12","usename12","usename12","usename12","usename12","usename12"], 'id':6}
-    image3 = {"url":"https://source.unsplash.com/random?cars", "username" :"username3", "likes" : 15, "likers" : ["usename13","usename13","usename13","usename13","usename13","usename13","usename13","usename13","usename13","usename13","usename13","usename13","usename13","usename13","usename13"], 'id':7}
-    
-    images = {"image1" : image1, "image2" : image2, "image3" : image3}
-    return render(request, "imagenest/top_images.html",  {"images" : images })
+    image_list = Post.objects.all().order_by("-likes")[:10]
 
+    # images contains eg. "image1" : image1
+    # where image1 is a dict contains url, username, likes, likers, id
+    images = {}
+    for i in range(len(image_list)):
+        images['image'+str(i)] = image_list[i]
+        
+    return render(request, "imagenest/top_images.html",  {"images" : images })
 
 # @login_required
 def search(request):
@@ -95,4 +110,35 @@ def upload(request):
         else:
             print(form.errors)        
     return render(request, "imagenest/upload.html", {'form':form})
+
+#this is taken from tango w/ django, dk if it actually works here, still needs url
+#mapping, html and ajax attached to it, uses the image url cos we have no form of
+#image id.
+class LikeImage(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        image_id = request.GET['url']
+
+        try:
+            image = Post.objects.get(id = image_id)
+        except Image.DoesNotExist:
+            return HttpResponse(-1)
+        except ValueError:
+            return HttpResponse(-1)
+
+        image.likes = image.likes + 1
+        image.save()
+
+        return HttpResponse(image.likes)
+
+  
+
+
+
+
+
+
+
+
+    
 
