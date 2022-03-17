@@ -41,7 +41,7 @@ ImageNest -
                     <a class="nav-item nav-link {% block activate_top_images_tab %}{% endblock %}"
                         href="{% url 'top_images' %}">Top
                         images</a>
-                    <a class="nav-item nav-link disabled" href="#">Log out</a>
+                    <a class="nav-item nav-link" href="{% url 'logout' %}" role='button'>Log out</a>
 
                 </div>
             </div>
@@ -89,6 +89,7 @@ ImageNest -
                 <div class="row py-2">
                     <!-- each image has a unique id: -->
                     <div id="likeBtn{{ image.id }}" class="col-1 black_and_white">
+                        <!-- ! make a form here: https://www.youtube.com/watch?time_continue=1563&v=xqFM6ykQEwo&feature=emb_logo&ab_channel=Pyplane -->
                        <button type="button" class="btn btn-link lead text-decoration-none" onclick="like('{{ image.id }}')">👍</button>
                     </div>
                     <!-- number of likes and usernames: -->

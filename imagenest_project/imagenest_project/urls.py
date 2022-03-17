@@ -27,7 +27,8 @@ urlpatterns = [
     path("", views.login, name="login"),
     # if we have a specific url to be handled by the app "imagenest", let it do so:
     path("imagenest/", include("imagenest.urls")),
-    path("login/", views.login, name="login"),
+    path("login/", views.login, name="login"), 
+    path("logout", views.logout, name="logout"),
     path("register/", views.register, name="register"),
     path("home/", views.home, name="home"),
     path("profile/", views.profile, name="profile"),
