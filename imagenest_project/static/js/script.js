@@ -1,26 +1,31 @@
-// $(document).ready(function () {
-//     $("#like-btn").click(function () {
-
-//         $('.black_and_white').on('change', toggle);
-
-//     });
-// });
-
-// function toggle() {
-//     $('.black_and_white').toggleClass("black_and_white");
-// }
 
 function like(id) {
-    
-    // event.preventDefault();
-    
+
+    // e.preventDefault();
+
     // each image has a unique id, therefore has a unique like button with id = eg. #likeBtn4
-    var elt = document.querySelector("#likeBtn"+id);
+    var elt = document.querySelector("#likeBtn" + id);
     elt.classList.toggle("black_and_white");
-    
-    if (!element.classList) {
+
+    if (!elt.classList) {
         var classes = elt.className.split(" ");
         var i = classes.indexOf("black_and_white");
     }
 
 }
+
+
+
+
+// like this post by submitting the like form:
+$(document).on('submit', '#like_button_form', function (e) {
+    // don't do default behaviour when submitting this form (liking an image):
+    e.preventDefault();
+    $.ajax({
+        type: 'POST',
+        data: {
+            task: $("#like_image_input").val(),
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+        },
+    })
+});
