@@ -1,12 +1,7 @@
 # this file can be put inside models.py but put it separate make the project tidier
 from django import forms
 from django.contrib.auth.models import User
-from .models import Submission
 from django.core.exceptions import ValidationError
-
-
-# from imagenest.models import Category, Page, UserProfile
-
 
 USERNAME_MAX_LENGTH = 15
 PASSWORD_MIN_LENGTH = 6
@@ -30,16 +25,6 @@ class LoginForm(forms.Form):
             attrs={"placeholder": "Password", "class": "form-control"}
         ),
     )
-    
-    # def clean(self):
-    #     cleaned_data = super().clean()
-    #     username = cleaned_data.get('username')
-    #     password = cleaned_data.get('password')
-    #     print(username)
-    #     print(password)
-    #     print(cleaned_data)
-    #     # if username and password:
-    #     return self.cleaned_data
 
     class Meta:
         model = User
@@ -88,17 +73,6 @@ class RegisterForm(forms.ModelForm):
             attrs={"placeholder": "Confirm password", "class": "form-control"}
         ),
     )
-    
-    # validate form data:
-    # def clean(self):
-    #     super().clean()
-    #     if not self.cleaned_data['username'].isalnum():
-    #         raise ValidationError(
-    #             "Username can only contain letters and numbers.")
-    #     if self.cleaned_data['password'] != self.cleaned_data['confirm_password']:
-    #         raise ValidationError(
-    #             "Password and confirm password does not match.")
-    #     return self.cleaned_data
 
     def save(self, commit=True):
         user = super(RegisterForm, self).save(commit=False)
@@ -147,8 +121,3 @@ class uploadForm(forms.ModelForm):
                 "location",
             )
 
-
-class ImageUploadForm(forms.ModelForm):
-    class Meta:
-        model = Submission
-        fields = ['image']
