@@ -6,14 +6,9 @@ Search
 {% endblock %}
 
 {% block body_block %}
-<div class="jumbotron p-4">
-     <div class="container">
-          <h1 class="jumbotron-heading">Search for a user</h1>
-     </div>
-</div>
-
 <div>
-    <form id="search_form" method="get" action="{% url 'rango:search_user' %}">
+    <h1>Search for a User</h1>
+    <form id="search_form" method="get">
         {% csrf_token %}
         <input type="text" name="username" value="" size="50" />
         <input type="submit" name="submit" value="Search" /></br>
@@ -21,19 +16,17 @@ Search
 </div>
 
 <div>
-    {% if found is False %}
+    {% if userIsFound is True %}
+        {{ results }}
+    {% else %}
         User not found.
-        {% if similar %}
+        {% if areSimilarUsers %}
             Did you mean: </br>
             {% for r in results %}
-                <li> {{ r }} </li> </br>
+                <li> {{ r }} </li>
             {% endfor %}
         {% endif %}
-
-    {% else %}
-        {% if results %}
-            {{ results }}
-        s{% endif %}
     {% endif %}
+
 </div>
 {% endblock %}

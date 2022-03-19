@@ -105,9 +105,30 @@ def top_images(request):
 
 # @login_required
 def search(request):
-    return render(request, "imagenest/search.html")
+    context_dict = {"userIsFound": True, "areSimilarUsers": False, "results":["user1", "user2"]}
+    similarUsers = suggest_users("2574266EXTRA")
+    print(similarUsers)
+    if similarUsers is not None:
+        areSimilarUsers = True
+        context_dict['results'] = similarUsers
+    return render(request, "imagenest/search.html", context_dict)
 
-    
+def suggest_users(username_input):
+    similar_users = set()
+
+    if username_input is not None:
+        for i in range(1, len(username_input)):
+            shortened_username = username_input[:-i]
+            users_found = User.objects.filter(username__startswith=shortened_username)
+            for user in users_found:
+                similar_users.add(user.username)
+
+    return list(similar_users)
+
+
+
+   
+
 def upload(request):
     form = uploadForm()
     if request.method == 'POST':
