@@ -9,7 +9,7 @@ from imagenest.models import *
 
 def populate():
     users = [
-        {'firstname': 'John',
+        {'firstname': 'John', 
          'surname': 'Clark',
          'username': 'john1',
          'password': '123456'},

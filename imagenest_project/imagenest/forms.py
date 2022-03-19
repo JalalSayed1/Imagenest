@@ -47,7 +47,7 @@ class RegisterForm(forms.ModelForm):
         label="Last name",
         max_length=USERNAME_MAX_LENGTH,
         widget=forms.TextInput(
-            attrs={"placeholder": "Surename", "class": "form-control"}
+            attrs={"placeholder": "Surname", "class": "form-control"}
         ),
     )
     username = forms.CharField(
