@@ -6,6 +6,7 @@ Search
 {% endblock %}
 
 {% block body_block %}
+
 <div>
     <h1>Search for a User</h1>
     <form id="search_form" action="{% url 'search' %}" method="GET"> 
@@ -17,16 +18,17 @@ Search
 
 <div>
     {% if userIsFound is True %}
-        {{ results }}
+        <a href={% url 'imagenest:profile' results %}>results</a>
     {% else %}
         User not found.
         {% if areSimilarUsers %}
             Did you mean: </br>
-            {% for r in results %}
+            {% for user in results %}
+                <a href={% url 'imagenest:profile' user %}>user</a>
                 <li> {{ r }} </li>
             {% endfor %}
         {% endif %}
     {% endif %}
-
 </div>
+
 {% endblock %}

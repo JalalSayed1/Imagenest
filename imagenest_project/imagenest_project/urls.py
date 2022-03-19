@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from imagenest import views
 from django.urls import include
+from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -31,9 +32,11 @@ urlpatterns = [
     path("logout", views.logout, name="logout"),
     path("register/", views.register, name="register"),
     path("home/", views.home, name="home"),
-    path("profile/", views.profile, name="profile"),
+    path("get_profile/<user>/", views.get_profile, name="get_profile"),
+    path("profile/<user>/", views.profile, name="profile"),
     path("topimages/", views.top_images, name="top_images"),
     path("search/", views.search, name="search"),
     path("upload/", views.upload, name ="upload"),
     path("like/", views.like_image, name ="like_image"),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

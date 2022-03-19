@@ -7,33 +7,4 @@
 Profile
 {% endblock %}
 
-
-<!--* Body: -->
-<!-- activate the correct corresponding tab in the menu: -->
-{% block activate_home_tab %}{% endblock %}
-{% block activate_profile_tab %}active{% endblock %}
-{% block activate_top_images_tab %}{% endblock %}
-
-{% block profile_image %}
-
-<div class="col py-5 d-flex justify-content-center text-center">
-
-    {% if profile_image %}
-
-    
-
-    <div class="row d-flex justify-content-center text-center">
-        <div class="col-6 mx-5 d-flex justify-content-center">
-            <div class="circle-img img-circle">
-                <!-- profile image must be a square: -->
-                <img class="img-fluid" src="{{ profile_image.url }}" alt="">
-            </div>
-        </div>
-        <div class="h2 w-100 col-3 m-5 text-center">
-            {{ profile_image.username }}
-        </div>
-    </div>
-
-</div>
-{% endif %}
-{% endblock %}
+This is the profile page.
