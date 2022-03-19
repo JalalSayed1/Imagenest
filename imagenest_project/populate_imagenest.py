@@ -105,21 +105,23 @@ def add_user_and_profile(firstname, surname, username, password):
 
 def add_post(picture,likes, username,likers):
     u = User.objects.get(username=username)
-    p = Post.objects.get_or_create(username=u)[0]
+
     try:
         s = Image.objects.get(url=picture)
     except:
         s = Image.objects.create(username=u)
-    p.picture=s.url=picture
-    p.likes=s.likes=likes
+
+    s.url=picture
+    s.likes=likes
+
     for liker in likers:
         lu = User.objects.get(username=liker)
         s.likers.add(lu)
         l = Like.objects.get_or_create(user=lu, image=s, value=LIKE_CHOICES[0])[0]
         l.save()
-    p.save()
+
     s.save()
-    return p
+
 
 if __name__ == '__main__':
     print('Starting Imagenest population script...')
