@@ -121,3 +121,5 @@ class uploadForm(forms.ModelForm):
                 "location",
             )
 
+class searchForm(forms.ModelForm):
+    name = forms.CharField(max_length=128, )

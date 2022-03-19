@@ -105,12 +105,22 @@ def top_images(request):
 
 # @login_required
 def search(request):
-    context_dict = {"userIsFound": True, "areSimilarUsers": False, "results":["user1", "user2"]}
-    similarUsers = suggest_users("2574266EXTRA")
-    print(similarUsers)
-    if similarUsers is not None:
-        areSimilarUsers = True
-        context_dict['results'] = similarUsers
+    context_dict = {"userIsFound": False, "areSimilarUsers": False, "results":[]}
+    if request.method == "GET" and request.GET.get("username"):
+        user_request = request.GET.get("username")
+        
+        try: 
+            user_found = User.objects.get(username=user_request)
+            context_dict['userIsFound'] = True
+            context_dict['results'] = user_found.username
+
+        except User.DoesNotExist:
+            context_dict['userIsFound'] = False
+            suggested_users = suggest_users(user_request)
+            if suggested_users:
+                context_dict['areSimilarUsers'] = True
+                context_dict['results'].extend(suggested_users)
+
     return render(request, "imagenest/search.html", context_dict)
 
 def suggest_users(username_input):
@@ -124,7 +134,6 @@ def suggest_users(username_input):
                 similar_users.add(user.username)
 
     return list(similar_users)
-
 
 
    

@@ -8,7 +8,7 @@ Search
 {% block body_block %}
 <div>
     <h1>Search for a User</h1>
-    <form id="search_form" method="get">
+    <form id="search_form" action="{% url 'search' %}" method="GET"> 
         {% csrf_token %}
         <input type="text" name="username" value="" size="50" />
         <input type="submit" name="submit" value="Search" /></br>
