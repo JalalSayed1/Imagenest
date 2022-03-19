@@ -13,33 +13,27 @@ Search
 </div>
 
 <div>
-     <form class="form-inline" id="user-form" method="post" action="{% url 'imagenest:search' %}">
-          {% csrf_token %}
-          <div class="form-group">
-               <input class="form-control" type="text" size="50" name="query" id="query" />
-          </div>
-          <button class="btn btn-primary" type="submit" name="submit">Search</button>
-     </form>
+    <form id="search_form" method="get" action="{% url 'rango:search_user' %}">
+        {% csrf_token %}
+        <input type="text" name="username" value="" size="50" />
+        <input type="submit" name="submit" value="Search" /></br>
+    </form>
 </div>
 
 <div>
-     {% if result_list %}
-     <h2>Results</h2>
+    {% if found is False %}
+        User not found.
+        {% if similar %}
+            Did you mean: </br>
+            {% for r in results %}
+                <li> {{ r }} </li> </br>
+            {% endfor %}
+        {% endif %}
 
-     <div class="list-group">
-          {% for result in result_list %}
-          <div class="list-group-item">
-               <h3 class="list-group-item-heading">
-                    <a href="{{ result.link }}">
-                         {{ result.title|safe|escape }}
-                    </a>
-               </h3>
-               <p class="list-group-item-text">
-                    {{ result.summary|safe|escape }}
-               </p>
-          </div>
-          {% endfor %}
-     </div>
-     {% endif %}
+    {% else %}
+        {% if results %}
+            {{ results }}
+        s{% endif %}
+    {% endif %}
 </div>
 {% endblock %}
