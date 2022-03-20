@@ -18,6 +18,20 @@ Upload picture
 </form>
 {% endblock %}
 
+{% block content %}  
+	<div class="upload">
+            <!--Simple Form-->
+            <h2>Upload Image</h2>
+            <form method="post">
+              {% csrf_token %}
+                  <input type="file" name="upload" accept="image/*">
+                  <br>
+                  <button type="submit">Upload</button>
+            </form>
+	</div>
+
+{% endblock %}
+
 
 <!--* Submit button and message: -->
 {% block primary_btn_block %}

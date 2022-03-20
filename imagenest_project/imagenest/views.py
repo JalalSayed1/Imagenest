@@ -143,16 +143,29 @@ def suggest_users(username_input):
     return list(similar_users)
 
 
+#     if form.is_valid():
+#         # Not done according to the Image Store System paradigm
+#         # Surely can be improved
+#         model = form.save(commit=False)
+#         model.uploader = request.user.userprofile
+#         model.save()
+#         return HttpResponse(status=HTTPStatus.OK)
+#     else:
+#         return HttpResponse(status=HTTPStatus.BAD_REQUEST)
+
+    
+@login_required
 def upload(request):
-    form = uploadForm()
+    form = uploadForm(request.POST, request.FILES)
     if request.method == 'POST':
-        form = uploadForm(request.POST)
+        #form = uploadForm(request.POST)
         if form.is_valid():
             #if the upload form is complete, commit it to the database
             form.save(commit=True)
             return redirect('/profile/')
         else:
             print(form.errors)        
+    
     return render(request, "imagenest/upload.html", {'form':form})
 
 
@@ -194,28 +207,6 @@ def like_image(request):
         like.save()
         
     return redirect(home)
-
-# @require_POST
-# def add_picture(request):
-#     # Check if the user is authenticated
-#     # Cannot use login_required because we call this in js,
-#     # not showing the error for the users
-#     if not request.user.is_authenticated:
-#         return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
-
-#     form = ImageUploadForm(request.POST, request.FILES)
-
-#     if form.is_valid():
-#         # Not done according to the Image Store System paradigm
-#         # Surely can be improved
-#         model = form.save(commit=False)
-#         model.uploader = request.user.userprofile
-#         model.save()
-#         return HttpResponse(status=HTTPStatus.OK)
-#     else:
-#         return HttpResponse(status=HTTPStatus.BAD_REQUEST)
-
-    
 
 #this is taken from tango w/ django, dk if it actually works here, still needs url
 #mapping, html and ajax attached to it, uses the image url cos we have no form of

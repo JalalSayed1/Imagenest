@@ -64,4 +64,11 @@ class Like(models.Model):
 
     def __str__(self):
         return self.image
+
+#upload class
+class upload(models.Model):
+    caption = models.CharField(max_length=128)
+    
+    class Meta:
+        verbose_name_plural = 'upload'
     
