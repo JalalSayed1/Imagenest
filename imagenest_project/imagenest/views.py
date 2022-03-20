@@ -80,8 +80,7 @@ def logout(request):
 @login_required
 def profile(request):
     
-    #line just here to remind me that profile page will almost definitely involve .filter()
-    images = Post.objects.filter(username=request.user)
+    images = Image.objects.filter(username=request.user)
     
     # image1 = {"url":"https://source.unsplash.com/random?places", "username" :"username1", "likes" : 2, "likers" : ["usename11", "usename11"], 'id':4}
     images = {}

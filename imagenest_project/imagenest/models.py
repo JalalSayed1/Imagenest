@@ -34,21 +34,6 @@ class UserProfile(models.Model):
 class upload(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-class Post(models.Model):
-    #picture is the url
-    picture = models.URLField(max_length=200)
-    date_posted = models.DateTimeField(default=timezone.now)
-    likes = models.IntegerField(default=0)
-    username = models.ForeignKey(User, on_delete=models.CASCADE)
-    #likers
-    
-    
-    class Meta:
-        verbose_name_plural = 'Posts'
-
-    def __str__(self):
-        return self.picture
-    
 # Image model for every image in the app except the profile image: 
 class Image(models.Model):
     username = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner')
