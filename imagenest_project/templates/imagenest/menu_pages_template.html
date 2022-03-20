@@ -104,7 +104,7 @@ ImageNest -
 
 
 
-                    <!--* number of likes and usernames: -->
+                    <!--* number of likes and likers: -->
                     <div class="col-6 w-auto ">
                         <strong>
 
@@ -113,6 +113,9 @@ ImageNest -
 
                             {% elif image.liker_usernames|length == 1 %}
                                 {{ image.num_likes }} Like by {{ image.liker_usernames.0 }}.
+
+                            {% elif image.liker_usernames|length == 2 %}
+                                {{ image.num_likes }} Like by {{ image.liker_usernames.0 }} and {{ image.liker_usernames.1 }}.
 
                             {% elif image.liker_usernames|length < 4 %} {{ image.num_likes }} Like by 
                             {{ image.liker_usernames.0 }}, {{ image.liker_usernames.1 }} and {{ image.liker_usernames.2 }}.

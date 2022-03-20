@@ -6,40 +6,29 @@ Search
 {% endblock %}
 
 {% block body_block %}
-<div class="jumbotron p-4">
-     <div class="container">
-          <h1 class="jumbotron-heading">Search for a user</h1>
-     </div>
+
+<div>
+    <h1>Search for a User</h1>
+    <form id="search_form" action="{% url 'search' %}" method="GET"> 
+        {% csrf_token %}
+        <input type="text" name="username" value="" size="50" />
+        <input type="submit" name="submit" value="Search" /></br>
+    </form>
 </div>
 
 <div>
-     <form class="form-inline" id="user-form" method="post" action="{% url 'imagenest:search' %}">
-          {% csrf_token %}
-          <div class="form-group">
-               <input class="form-control" type="text" size="50" name="query" id="query" />
-          </div>
-          <button class="btn btn-primary" type="submit" name="submit">Search</button>
-     </form>
+    {% if userIsFound is True %}
+        <a href={% url 'imagenest:profile' results %}>results</a>
+    {% else %}
+        User not found.
+        {% if areSimilarUsers %}
+            Did you mean: </br>
+            {% for user in results %}
+                <a href={% url 'imagenest:profile' user %}>user</a>
+                <li> {{ r }} </li>
+            {% endfor %}
+        {% endif %}
+    {% endif %}
 </div>
 
-<div>
-     {% if result_list %}
-     <h2>Results</h2>
-
-     <div class="list-group">
-          {% for result in result_list %}
-          <div class="list-group-item">
-               <h3 class="list-group-item-heading">
-                    <a href="{{ result.link }}">
-                         {{ result.title|safe|escape }}
-                    </a>
-               </h3>
-               <p class="list-group-item-text">
-                    {{ result.summary|safe|escape }}
-               </p>
-          </div>
-          {% endfor %}
-     </div>
-     {% endif %}
-</div>
 {% endblock %}

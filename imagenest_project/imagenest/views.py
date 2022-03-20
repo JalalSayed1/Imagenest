@@ -13,10 +13,9 @@ from django.views.decorators.csrf import csrf_protect
 
 
 from imagenest import views
-from imagenest.models import Post
 
 from .forms import LoginForm, RegisterForm, uploadForm
-from .models import UserProfile, Image, Like, Post
+from .models import UserProfile, Image, Like
 
 
 @csrf_protect
@@ -78,16 +77,27 @@ def logout(request):
 
 
 @login_required
-def profile(request):
+def profile(request, user):
+    # changed the urls so that their profile page will be at /profile/username
+    # will need to change view so that it accesses user data through username parameter
     
     images = Image.objects.filter(username=request.user)
-    
+
+    #line just here to remind me that profile page will almost definitely involve .filter() 
+    #images = Post.objects.filter(username=user)
+
     # image1 = {"url":"https://source.unsplash.com/random?places", "username" :"username1", "likes" : 2, "likers" : ["usename11", "usename11"], 'id':4}
-    images = {}
+    # images = {}
     
     profile_image = {"url":"https://source.unsplash.com/250x250?person", "username" :"username1", 'id' : 8}
     
-    return render(request, "imagenest/profile.html", {"profile_image" : profile_image, "images" : images })
+    return render(request, "imagenest/profile.html", {"user": user, "profile_image" : profile_image, "images" : images})
+
+
+@login_required
+def get_profile(request, user):
+    return render(request, "imagenest/get_profile.html", {"user": user})
+
 
 @login_required
 def top_images(request):
@@ -104,9 +114,35 @@ def top_images(request):
 
 # @login_required
 def search(request):
-    return render(request, "imagenest/search.html")
+    context_dict = {"userIsFound": False, "areSimilarUsers": False, "results":[]}
+    if request.method == "GET" and request.GET.get("username"):
+        user_request = request.GET.get("username")
+        
+        try: 
+            user_found = User.objects.get(username=user_request)
+            context_dict['userIsFound'] = True
+            context_dict['results'] = user_found.username
 
-    
+        except User.DoesNotExist:
+            context_dict['userIsFound'] = False
+            suggested_users = suggest_users(user_request)
+            if suggested_users:
+                context_dict['areSimilarUsers'] = True
+                context_dict['results'].extend(suggested_users)
+
+    return render(request, "imagenest/search.html", context_dict)
+
+def suggest_users(username_input):
+    similar_users = set()
+    if username_input is not None:
+        for i in range(1, len(username_input)):
+            shortened_username = username_input[:-i]
+            users_found = User.objects.filter(username__startswith=shortened_username)
+            for user in users_found:
+                similar_users.add(user.username)
+    return list(similar_users)
+
+
 def upload(request):
     form = uploadForm()
     if request.method == 'POST':
@@ -200,13 +236,3 @@ class LikeImage(View):
         image.save()
 
         return HttpResponse(image.likes)
-
-  
-
-
-
-
-
-
-    
-
