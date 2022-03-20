@@ -8,11 +8,9 @@ USERNAME_MAX_LENGTH = 15
 PASSWORD_MAX_LENGTH = 40
 
 class Register(models.Model):
-    
     firstname = models.CharField(max_length=USERNAME_MAX_LENGTH, blank=True)
     surname = models.CharField(max_length=USERNAME_MAX_LENGTH, blank=True)
-    username = models.CharField(
-        max_length=USERNAME_MAX_LENGTH, unique=True)
+    username = models.CharField(max_length=USERNAME_MAX_LENGTH, unique=True)
     password = models.CharField(max_length=PASSWORD_MAX_LENGTH, blank=True)
 
 
