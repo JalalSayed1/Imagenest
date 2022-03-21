@@ -8,6 +8,7 @@ from imagenest.forms import *
 from imagenest.models import *
 
 def populate():
+    # users to store on the database:
     users = [
         {'firstname': 'John', 
          'surname': 'Clark',
@@ -35,92 +36,109 @@ def populate():
          'password': 'nothing'},
         ]
 
-    posts = [
-        {'picture':'https://images.unsplash.com/photo-1624965085151-0710f6b3f284',
+    # images to store on the database
+    images = [
+        {'url':'https://images.unsplash.com/photo-1624965085151-0710f6b3f284',
          'likes':3,
          'username':'john1',
          'likers': ['ksmith', 'na1mi2', 'jdjd']},
-        {'picture':'https://images.unsplash.com/photo-1572091574819-ea8bb5394b1d',
+        {'url':'https://images.unsplash.com/photo-1572091574819-ea8bb5394b1d',
          'likes':1,
          'username':'john1',
          'likers': ['jdjd']},
-        {'picture':'https://images.unsplash.com/photo-1640622660721-45b83554ab05',
+        {'url':'https://images.unsplash.com/photo-1640622660721-45b83554ab05',
          'likes':0,
          'username':'ksmith',
          'likers': []},
-        {'picture':'https://images.unsplash.com/photo-1647471641611-908659d7b366',
+        {'url':'https://images.unsplash.com/photo-1647471641611-908659d7b366',
          'likes':5,
          'username':'ksmith',
          'likers': ['john1','liow123','jdjd','this_is_hu','na1mi2']},
-        {'picture':'https://images.unsplash.com/photo-1647514422086-18cde746fa26',
+        {'url':'https://images.unsplash.com/photo-1647514422086-18cde746fa26',
          'likes':2,
          'username':'john1',
          'likers': ['jdjd','this_is_hu']},
-        {'picture':'https://images.unsplash.com/photo-1647363542902-9b76666d88b3',
+        {'url':'https://images.unsplash.com/photo-1647363542902-9b76666d88b3',
          'likes':3,
          'username':'this_is_hu',
          'likers': ['jdjd','this_is_hu']},
-        {'picture':'https://images.unsplash.com/photo-1647482290110-df9a2895cb95',
+        {'url':'https://images.unsplash.com/photo-1647482290110-df9a2895cb95',
          'likes':4,
          'username':'ksmith',
          'likers': ['na1mi2','this_is_hu']},
-        {'picture':'https://images.unsplash.com/photo-1640622299541-8c8ab8a098f3',
+        {'url':'https://images.unsplash.com/photo-1640622299541-8c8ab8a098f3',
          'likes':1,
          'username':'liow123',
          'likers': ['this_is_hu']}
         ]
 
-    for u in users:
-        add_user_and_profile(u['firstname'],u['surname'],u['username'],u['password'])
+    # add each user to database
+    for user in users:
+        add_user_and_profile(user['firstname'], user['surname'], user['username'], user['password'])
 
-    for p in posts:
-        add_post(p['picture'],p['likes'],p['username'],p['likers'])
+    # add each image to database
+    for image in images:
+        add_image(image['url'], image['likes'], image['username'], image['likers'])
 
-    for u in User.objects.all():
-        for s in u.owner.all():
-            print(f'- {u.username}: {s.url}; likers: {s.liker_usernames}')
+    # prints the image details being added to the database
+    for user in User.objects.all():
+        for image in user.owner.all():
+            print(f'- {user.username}: {image.url}; likers: {image.liker_usernames}')
+
 
 def add_user_and_profile(firstname, surname, username, password):
     try:
         # if the user already exists, do not create again
-        u = User.objects.get(username=username)
+        user = User.objects.get(username=username)
+
     except User.DoesNotExist:
-        # create the user
-        f = RegisterForm({'firstname':firstname, 'surname':surname,
+        # otherwise create the user
+        form = RegisterForm({'firstname':firstname, 'surname':surname,
                         'username':username, 'password': password,
                         'confirm_password': password})
-        u = f.save(commit=False)
-        u.set_password(password)
-        u.save()
-    up = UserProfile.objects.get_or_create(user=u, firstname=firstname, surname=surname, username=username)[0]
-    u.firstname=firstname
-    up.firstname=firstname
-    u.surname=surname
-    up.surname=surname
-    u.password=password
-    up.password=password
-    u.save()
-    up.save()
-    return u
+        user = form.save(commit=False)
+        user.set_password(password)
+        user.save()
 
-def add_post(picture,likes, username,likers):
-    u = User.objects.get(username=username)
+    # set user's attributes
+    user.firstname = firstname
+    user.surname = surname
+    user.password = password
+    user.save()
+
+    # create UserProfile object using the parameters
+    userProfile = UserProfile.objects.get_or_create(user=user, firstname=firstname, surname=surname, username=username)[0]
+    userProfile.firstname = firstname
+    userProfile.surname = surname
+    userProfile.password = password
+    userProfile.save()
+
+    return user
+
+
+def add_image(url, likes, username, likers):
+    user = User.objects.get(username=username) # find associated User object
 
     try:
-        s = Image.objects.get(url=picture)
+        # if the image already exists, do not create again
+        image = Image.objects.get(url=url)
     except:
-        s = Image.objects.create(username=u)
+        # otherwise create the image
+        image = Image.objects.create(username=user)
 
-    s.url=picture
-    s.likes=likes
+    # set the image attributes
+    image.url = url
+    image.likes = likes
 
+    # set the users who liked the image and the likes
     for liker in likers:
-        lu = User.objects.get(username=liker)
-        s.likers.add(lu)
-        l = Like.objects.get_or_create(user=lu, image=s, value=LIKE_CHOICES[0])[0]
-        l.save()
+        user_who_liked = User.objects.get(username=liker)
+        image.likers.add(user_who_liked)
+        like = Like.objects.get_or_create(user=user_who_liked, image=image, value=LIKE_CHOICES[0])[0]
+        like.save()
 
-    s.save()
+    # save the image
+    image.save()
 
 
 if __name__ == '__main__':
