@@ -1,34 +1,58 @@
-{% extends 'imagenest/base.html' %}
+{% extends 'imagenest/menu_pages_template.html' %}
 {% load staticfiles %}
 
-{% block title_block %}
+{% block page_title_block %}
 Search
 {% endblock %}
 
-{% block body_block %}
+{% block under_menu_inside_a_row %}
 
-<div>
-    <h1>Search for a User</h1>
-    <form id="search_form" action="{% url 'search' %}" method="GET"> 
+<!--* row containing everything: -->
+<div class="row my-5 mx-auto">
+
+    <div class="row my-4">
+        <div class="col">
+            <h1>Search for a User</h1>
+        </div>
+    </div>
+
+    <form id="search_form" action="{% url 'search' %}" method="GET">
         {% csrf_token %}
-        <input type="text" name="username" value="" size="50" />
-        <input type="submit" name="submit" value="Search" /></br>
+
+        <div class="row my-4 g-2">
+            <div class="col-9 h-100">
+                <input type="text" class="form-control" name="username" value="" size="50" />
+            </div>
+
+            <div class="col-3 h-100">
+                <input type="submit" class="form-control btn-primary" name="submit" value="Search" />
+            </div>
+        </div>
     </form>
+
+    <div class="row">
+        <div class="col-auto">
+            {% if userIsFound is True %}
+                <a href={% url 'imagenest:profile' results %}>results</a>
+
+            {% else %}
+                User not found.
+
+                {% if areSimilarUsers %}
+                    Did you mean: </br>
+                    <ul class="list-group">
+                    {% for user in results %}
+                        <a href={% url 'imagenest:profile' user %} class="list-group-item list-group-item-action">{{ user }}</a>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+
+            {% endif %}
+        </div>
+
+
+    </div>
 </div>
 
-<div>
-    {% if userIsFound is True %}
-        <a href={% url 'imagenest:profile' results %}>results</a>
-    {% else %}
-        User not found.
-        {% if areSimilarUsers %}
-            Did you mean: </br>
-            {% for user in results %}
-                <a href={% url 'imagenest:profile' user %}>user</a>
-                <li> {{ r }} </li>
-            {% endfor %}
-        {% endif %}
-    {% endif %}
-</div>
 
 {% endblock %}
