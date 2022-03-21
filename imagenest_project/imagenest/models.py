@@ -64,11 +64,16 @@ class Like(models.Model):
 
     def __str__(self):
         return self.image
-
 #upload class
 class upload(models.Model):
+    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="profile_images", blank=True) #not sure where to upload to yet
+    """
+    user_uploading = models.OneToOneField(User, on_delete=models.CASCADE)
+    likes = models.PositiveIntegerField(default=0) #setting likes to 0 when uploading
+    likers = models.ManyToManyField(UserProfile)
     caption = models.CharField(max_length=128)
     
     class Meta:
         verbose_name_plural = 'upload'
-    
+    """

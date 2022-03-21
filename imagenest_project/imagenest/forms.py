@@ -96,30 +96,34 @@ class RegisterForm(forms.ModelForm):
             "confirm_password",
         )
         
-class uploadForm(forms.ModelForm):
-    #get username 
-    # username =
-    #image upload
-    
-    
-    #required
+class uploadForm(forms.ModelForm):  
     caption = forms.CharField(
-        max_length=200,
-        widget = forms.TextInput(attrs={"placeholder": "Caption", "class": "form-control"})
+        label="image caption",
+        max_length=CAPTION_MAX_LENGTH,
+        widget=forms.TextInput(
+        attrs={"placeholder": "CAPTION", "class": "form-control"}),
     )
-    
-    #not required
-    location = forms.CharField(
-        max_length = 25, widget = forms.TextInput(attrs={"placeholder": "location", "class": "form-control"})
-    )
-    
+
+    image = forms.FileInput()
+
+    def save(self, commit=True):
+        user = super(RegisterForm, self).save()
+        caption = self.cleaned_data['caption']
+        image = self.cleaned_data['image']
+        
+        if commit:
+            user.save()
+   
+        return user
+
     class Meta:
-            model = User
+            model = upload
             fields = (
-                "username",
+                #"username",
                 "caption",
-                "location",
+                "image",
             )
+
 
 class searchForm(forms.ModelForm):
     name = forms.CharField(max_length=128, )

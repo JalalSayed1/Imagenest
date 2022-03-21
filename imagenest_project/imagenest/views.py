@@ -156,6 +156,16 @@ def suggest_users(username_input):
     
 @login_required
 def upload(request):
+    if request.method == 'GET':
+        form=uploadForm()
+        if form.is_valid():
+            form.save(commit=True)
+            return redirect('/profile/')
+        else:
+            print(form.errors)
+    return render(request=request, template_name="imagenest/upload.html")
+
+    """
     form = uploadForm(request.POST, request.FILES)
     if request.method == 'POST':
         #form = uploadForm(request.POST)
@@ -167,7 +177,7 @@ def upload(request):
             print(form.errors)        
     
     return render(request, "imagenest/upload.html", {'form':form})
-
+    """
 
 @login_required
 def home(request):
