@@ -14,8 +14,8 @@ from django.views.decorators.csrf import csrf_protect
 
 from imagenest import views
 
-from .forms import LoginForm, RegisterForm, uploadForm
-from .models import UserProfile, Image, Like
+from .forms import LoginForm, RegisterForm, ImageUploadForm
+from .models import UserProfile, Image, Like, Submission
 
 
 @csrf_protect
@@ -154,30 +154,26 @@ def suggest_users(username_input):
 #         return HttpResponse(status=HTTPStatus.BAD_REQUEST)
 
     
-@login_required
-def upload(request):
-    if request.method == 'GET':
-        form=uploadForm()
-        if form.is_valid():
-            form.save(commit=True)
-            return redirect('/profile/')
-        else:
-            print(form.errors)
-    return render(request=request, template_name="imagenest/upload.html")
+@require_POST
+def add_picture(request):
+    # Check if the user is authenticated
+    # Cannot use login_required because we call this in js,
+    # not showing the error for the users
+    if not request.user.is_authenticated:
+        return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
 
-    """
-    form = uploadForm(request.POST, request.FILES)
-    if request.method == 'POST':
-        #form = uploadForm(request.POST)
-        if form.is_valid():
-            #if the upload form is complete, commit it to the database
-            form.save(commit=True)
-            return redirect('/profile/')
-        else:
-            print(form.errors)        
-    
-    return render(request, "imagenest/upload.html", {'form':form})
-    """
+    form = ImageUploadForm(request.POST, request.FILES)
+
+    if form.is_valid():
+        # Not done according to the Image Store System paradigm
+        # Surely can be improved
+        model = form.save(commit=False)
+        model.uploader = request.user.userprofile
+        model.save()
+        return HttpResponse(status=HTTPStatus.OK)
+    else:
+        return HttpResponse(status=HTTPStatus.BAD_REQUEST)
+
 
 @login_required
 def home(request):

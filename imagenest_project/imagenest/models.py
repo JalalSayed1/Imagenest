@@ -7,6 +7,7 @@ from django.utils import timezone
 USERNAME_MAX_LENGTH = 15
 PASSWORD_MAX_LENGTH = 40
 
+
 class Register(models.Model):
     firstname = models.CharField(max_length=USERNAME_MAX_LENGTH, blank=True)
     surname = models.CharField(max_length=USERNAME_MAX_LENGTH, blank=True)
@@ -29,9 +30,6 @@ class UserProfile(models.Model):
         max_length=USERNAME_MAX_LENGTH, unique=True)
     password = models.CharField(max_length=PASSWORD_MAX_LENGTH, blank=True)
         
-class upload(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
 # Image model for every image in the app except the profile image: 
 class Image(models.Model):
     username = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner')
@@ -64,16 +62,15 @@ class Like(models.Model):
 
     def __str__(self):
         return self.image
+        
 #upload class
-class upload(models.Model):
-    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="profile_images", blank=True) #not sure where to upload to yet
-    """
-    user_uploading = models.OneToOneField(User, on_delete=models.CASCADE)
-    likes = models.PositiveIntegerField(default=0) #setting likes to 0 when uploading
-    likers = models.ManyToManyField(UserProfile)
-    caption = models.CharField(max_length=128)
-    
+class Submission(models.Model):
+    image = models.ImageField(upload_to='images/')
+    uploader = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    creation_time = models.DateTimeField(auto_now_add=True)
+
+    like_count = models.PositiveIntegerField(default=0)
+    likers = models.ManyToManyField(UserProfile, related_name="favorites")
+
     class Meta:
-        verbose_name_plural = 'upload'
-    """
+        ordering = ['-creation_time']

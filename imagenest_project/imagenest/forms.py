@@ -2,11 +2,11 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from .models import Submission
 
 USERNAME_MAX_LENGTH = 15
 PASSWORD_MIN_LENGTH = 6
 PASSWORD_MAX_LENGTH = 40
-CAPTION_MAX_LENGTH = 100
 
 class LoginForm(forms.Form):
 
@@ -97,34 +97,10 @@ class RegisterForm(forms.ModelForm):
             "confirm_password",
         )
         
-class uploadForm(forms.ModelForm):  
-    caption = forms.CharField(
-        label="image caption",
-        max_length=CAPTION_MAX_LENGTH,
-        widget=forms.TextInput(
-        attrs={"placeholder": "CAPTION", "class": "form-control"}),
-    )
-
-    image = forms.FileInput()
-
-    def save(self, commit=True):
-        user = super(RegisterForm, self).save()
-        caption = self.cleaned_data['caption']
-        image = self.cleaned_data['image']
-        
-        if commit:
-            user.save()
-   
-        return user
-
+class ImageUploadForm(forms.ModelForm):
     class Meta:
-            model = upload
-            fields = (
-                #"username",
-                "caption",
-                "image",
-            )
-
+        model = Submission
+        fields = ['image']
 
 class searchForm(forms.ModelForm):
     name = forms.CharField(max_length=128, )
