@@ -33,7 +33,7 @@ Search
     <div class="row">
         <div class="col-auto">
             {% if userIsFound is True %}
-                <a href={% url 'imagenest:profile' results %}>results</a>
+                <a href="/profile/{{ results }}/">results</a>
 
             {% else %}
                 User not found.
@@ -42,7 +42,7 @@ Search
                     Did you mean: </br>
                     <ul class="list-group">
                     {% for user in results %}
-                        <a href={% url 'imagenest:profile' user %} class="list-group-item list-group-item-action">{{ user }}</a>
+                        <a href="/profile/{{ results }}/" class="list-group-item list-group-item-action">{{ user }}</a>
                     {% endfor %}
                     </ul>
                 {% endif %}
