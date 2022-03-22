@@ -132,35 +132,48 @@ def top_images(request):
         
     return render(request, "imagenest/top_images.html",  context)
 
-# @login_required
+@login_required
 def search(request):
-    context_dict = {"userIsFound": False, "areSimilarUsers": False, "results":[]}
+    # set up the context_dict with default values
+    context_dict = {"searchHasBeenUsed": False, "userIsFound": False, "areSimilarUsers": False, "results":[]}
+
+    # if a value for the username has been defined
     if request.method == "GET" and request.GET.get("username"):
-        user_request = request.GET.get("username")
-        
+        context_dict["searchHasBeenUsed"] = True
+        searched_username = request.GET.get("username") # store username request
+
         try: 
-            user_found = User.objects.get(username=user_request)
-            context_dict['userIsFound'] = True
+            # check if the searched username corresponds to a User object
+            user_found = User.objects.get(username=searched_username)
+            context_dict['userIsFound'] = True  # if so update the context_dict
             context_dict['results'] = user_found.username
 
         except User.DoesNotExist:
-            context_dict['userIsFound'] = False
-            suggested_users = suggest_users(user_request)
-            if suggested_users:
+            # if an error is thrown and the username does not correspond to a User object
+            context_dict['userIsFound'] = False  # update context_dict
+            suggested_users = suggest_users(searched_username) # find a list of similar registered usernames
+            if suggested_users: # add data to context_dict
                 context_dict['areSimilarUsers'] = True
                 context_dict['results'].extend(suggested_users)
 
     return render(request, "imagenest/search.html", context_dict)
 
+
 def suggest_users(username_input):
     similar_users = set()
+
     if username_input is not None:
         for i in range(1, len(username_input)):
-            shortened_username = username_input[:-i]
+            # remove the last letter of the username on each iteration
+            shortened_username = username_input[:-i] 
+
+             # check whether another username starts with the same string
             users_found = User.objects.filter(username__startswith=shortened_username)
             for user in users_found:
+                # add each returned to a set to ensure there are no duplicates
                 similar_users.add(user.username)
-    return list(similar_users)
+
+    return list(similar_users) # return the set as a list
 
 
 #     if form.is_valid():

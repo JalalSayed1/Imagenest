@@ -32,21 +32,25 @@ Search
 
     <div class="row">
         <div class="col-auto">
-            {% if userIsFound is True %}
-                <a href="/profile/{{ results }}/">results</a>
+            {% if searchHasBeenUsed is True %}
 
-            {% else %}
-                User not found.
+                {% if userIsFound is True %}
+                    <a href="/profile/{{ results }}/">{{ results }}</a>
 
-                {% if areSimilarUsers %}
-                    Did you mean: </br>
-                    <ul class="list-group">
-                    {% for user in results %}
-                        <a href="/profile/{{ results }}/" class="list-group-item list-group-item-action">{{ user }}</a>
-                    {% endfor %}
-                    </ul>
+                {% else %}
+                    User not found.
+
+                    {% if areSimilarUsers %}
+                        Did you mean: </br>
+                        <ul class="list-group">
+                        {% for user in results %}
+                            <a href="/profile/{{ results }}/" class="list-group-item list-group-item-action">{{ user }}</a>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+
                 {% endif %}
-
+            
             {% endif %}
         </div>
 
