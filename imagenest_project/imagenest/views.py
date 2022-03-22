@@ -101,8 +101,13 @@ def get_profile(request, user):
 
 @login_required
 def top_images(request):
-    #! this order_by did not work:
+    #order_by seems to work now, there was a discrepency with likes and likers which
+    #is now fixed
     images = Image.objects.all().order_by("-likes")[:10]
+
+    context = {
+        'images' : images,
+        }
 
     # images contains eg. "image1" : image1
     # where image1 is a dict contains url, username, likes, likers, id
@@ -110,7 +115,7 @@ def top_images(request):
     # for i in range(len(image_list)):
     #     images['image'+str(i)] = image_list[i]
         
-    return render(request, "imagenest/top_images.html",  {"images" : images })
+    return render(request, "imagenest/top_images.html",  context)
 
 # @login_required
 def search(request):
