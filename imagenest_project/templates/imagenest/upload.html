@@ -1,31 +1,40 @@
 {% extends 'imagenest/menu_pages_template.html' %}
 {% load staticfiles %}
 
-<!--* Head: -->
 {% block page_title_block %}
 Upload picture
 {% endblock %}
 
 {% block under_menu_inside_a_row %}
 
-<h1>Upload new image as @{{ uploader }}:</h1>
+<div class="row my-5 mx-auto">
 
-<form id="uploadForm" method="POST"> 
-    {% csrf_token %}
-    {% for hidden in upload_form.hidden_fields %}
-        {{hidden}}
-    {% endfor %}
-    
-    {% for field in upload_form.visible_fields %}
-        {{ field.errors }}
-        {{ field.help_text }}
-        {{ field }}
-    {% endfor %}
+    <div class="row my-4">
+        <div class="col">
+            <h1>Upload image as @{{ uploader }}:</h1>
+        </div>
+    </div>
 
-    <input type="submit" class="form-control btn-primary" name="submit" value="Upload" />
-</form>
+    <form id="upload_form" method="POST">
+        <div class="row my-4 g-2">
+            <div class="col-9 h-100">
+                {% csrf_token %}
+                {% for hidden in upload_form.hidden_fields %}
+                {{hidden}}
+                {% endfor %}
 
+                {% for field in upload_form.visible_fields %}
+                {{ field.errors }}
+                {{ field.help_text }}
+                {{ field }}
+                {% endfor %}
+            </div>
 
+            <div class="col-3 h-100">
+                <input type="submit" class="form-control btn-primary" name="submit" value="Upload" />
+            </div>
 
-
+        </div>
+    </form>
+</div>
 {% endblock %}
