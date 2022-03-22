@@ -4,7 +4,7 @@ function like(id) {
     // e.preventDefault();
 
     // each image has a unique id, therefore has a unique like button with id = eg. #likeBtn4
-    var elt = document.querySelector("#likeBtn" + id);
+    var elt = document.querySelector(id);
     elt.classList.toggle("black_and_white");
 
     if (!elt.classList) {
@@ -14,9 +14,6 @@ function like(id) {
 
 }
 
-
-
-
 // like this post by submitting the like form:
 $(document).on('submit', '#like_button_form', function (e) {
     // don't do default behaviour when submitting this form (liking an image):
@@ -24,9 +21,9 @@ $(document).on('submit', '#like_button_form', function (e) {
     $.ajax({
         type: 'POST',
         data: {
-            task: $("#like_image_input").val(),
             // submit the form (like an image):
             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
         },
+        success: function () {}
     })
 });

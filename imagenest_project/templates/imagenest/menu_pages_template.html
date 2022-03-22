@@ -15,134 +15,132 @@ ImageNest -
 
 <!--* Body: -->
 {% block body_block %}
-<!-- to center elt: position-absolute top-0 start-50 translate-middle-x -->
-<div id="body" class="w-75 mx-auto">
-    <div class="col">
-        <nav class="navbar navbar-expand-lg navbar-light bg-white bg-light p-4">
-            <!-- hyper link to the current page -->
-            <a class="navbar-brand" href="./">
-                <img src="{% static 'images/ImageNest Logo.png' %}" width="30" height="30"
-                    class="d-inline-block align-top" alt="ImageNest logo">
-                ImageNest
-            </a>
+<div id="body" class="w-75 mx-auto position-relative">
+    <div class="row">
+        <div class="col">
+            <nav class="navbar navbar-expand-lg navbar-light p-4">
+                <!-- hyper link to the current page -->
+                <a class="navbar-brand" href="./">
+                    <img src="{% static 'images/ImageNest Logo.png' %}" width="30" height="30"
+                        class="d-inline-block align-top" alt="ImageNest logo">
+                    ImageNest
+                </a>
 
-            <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button> -->
-
-            <div class="collapse navbar-collapse" id="headerMenu">
-                <div class="navbar-nav">
-                    <!-- Menu items: -->
-                    <a class="nav-item nav-link {% block activate_home_tab %}{% endblock %}"
-                        href="{% url 'home' %}">Home</a>
-                    <a class="nav-item nav-link {% block activate_profile_tab %}{% endblock %}"
-                        href="{% url 'profile' %}">Profile</a>
-                    <a class="nav-item nav-link {% block activate_top_images_tab %}{% endblock %}"
-                        href="{% url 'top_images' %}">Top
-                        Images</a>
-                    <a class="nav-item nav-link" href="{% url 'logout' %}" role='button'>Log Out</a>
-
+                <div class="collapse navbar-collapse" id="headerMenu">
+                    <div class="navbar-nav">
+                        <!-- Menu items: -->
+                        <a class="nav-item nav-link {% block activate_home_tab %}{% endblock %}"
+                            href="{% url 'home' %}">Home</a>
+                        <a class="nav-item nav-link {% block activate_profile_tab %}{% endblock %}"
+                            href="{% url 'profile' %}">Profile</a>
+                        <a class="nav-item nav-link {% block activate_top_images_tab %}{% endblock %}"
+                            href="{% url 'top_images' %}">Top Images</a>
+                        <a class="nav-item nav-link" href="{% url 'logout' %}" role='button'>Log Out</a>
+                    </div>
                 </div>
-            </div>
 
-            <!--* Search function: -->
-            <div class="float-end mx-1">
-                <a href="{% url 'search' %}" class="btn btn-outline-primary">Search</a>
-                <a href="{% url 'upload' %}" class="btn btn-primary">Add Picture</a>
-            </div>
+                <!--* Search function: -->
+                <div class="float-end mx-1">
+                    <a href="{% url 'search' %}" class="btn btn-outline-primary">Search</a>
+                    <a href="{% url 'upload' %}" class="btn btn-primary">Add Picture</a>
+                </div>
 
-        </nav>
+            </nav>
+        </div>
     </div>
 
 
     
-    <div class="row w-100 mx-auto my-4 h-auto">
-        {% block under_menu_inside_a_row %}
+    <div class="row mx-auto my-4 h-auto">
+        <div class="col">
+            {% block under_menu_inside_a_row %}
 
-        <div class="row">
-            <!-- if profile image exists, will be placed here: -->
-            {% block profile_image %}
-            {% endblock %}
-        </div>
-
-
-
-        {% for image in images %}
-
-        <div class="row">
-
-            <!--* username column: -->
-            <div class="col-3 text-end">
-                {% block col1_block %}
-                {% if image %}
-                By @{{ image.username }}
-                {% endif %}
-                {% endblock %}
-            </div>
-
-            <!--* image column: -->
-            <div class="col-6 py-1 overflow-auto">
-                {% block col2_block %}
-                <img class="img-fluid" src="{{ image.url }}" alt="">
-                {% endblock %}
-
-                <!-- Like button and text row inside image column: -->
-                <div class="row py-2">
-
-                    <div id="likeBtn{{ image.id }}" class="col-1 black_and_white">
-                        <form id="like_button_form" method="POST" action="{% url 'like_image' %}">
-                            {% csrf_token %}
-
-                            <input type="hidden" id="like_image_input" name="image_id" value="{{ image.id }}">
-
-                            <button type="submit" id="like_btn"
-                                class="btn btn-link lead text-decoration-none" onclick="like('{{ image.id }}')">👍</button>
-
-                        </form>
-                    </div>
-
-
-
-                    <!--* number of likes and likers: -->
-                    <div class="col-6 w-auto ">
-                        <strong>
-
-                            {% if image.liker_usernames|length == 0 %}
-                                {{ image.num_likes }} Likes
-
-                            {% elif image.liker_usernames|length == 1 %}
-                                {{ image.num_likes }} Like by {{ image.liker_usernames.0 }}.
-
-                            {% elif image.liker_usernames|length == 2 %}
-                                {{ image.num_likes }} Like by {{ image.liker_usernames.0 }} and {{ image.liker_usernames.1 }}.
-
-                            {% elif image.liker_usernames|length < 4 %} {{ image.num_likes }} Like by 
-                            {{ image.liker_usernames.0 }}, {{ image.liker_usernames.1 }} and {{ image.liker_usernames.2 }}.
-                                
-                            {% else %}
-                                {{ image.num_likes }} Likes by <!-- only 3 usernames to be shown: -->
-                                {% for liker in image.liker_usernames|slice:":2" %}
-                                {{ liker }},
-                                {% endfor %}
-                                {{ image.liker_usernames.2 }}
-
-                                and others.
-                                {% endif%}
-
-                        </strong>
-
-                    </div>
+            <div class="row">
+                <div class="col">
+                    <!-- if profile image exists, will be placed here: -->
+                    {% block profile_image %}
+                    {% endblock %}
                 </div>
             </div>
 
+
+            {% for image in images %}
+
+            <div class="row w-100">
+                <!--* username column: -->
+                <div class="col-3 text-end">
+                    {% block col1_block %}
+                        {% if image %}
+                        By @{{ image.username }}
+                        {% endif %}
+                    {% endblock %}
+                </div>
+
+                <!--* image column: -->
+                <div class="col-6 my-1">
+                    <div class="row ">
+                        <div class="col">
+                            {% block image_block %}
+                            <img class="img-fluid d-block w-100" src="{{ image.url }}">
+                            {% endblock %}
+                        </div>
+                    </div>
+
+                    <!-- Like button and text row inside image column: -->
+                    <div class="row my-2">
+                        <div id="likeBtn{{ image.id }}" class="col-1 black_and_white">
+
+                            <form id="like_button_form" method="POST" action="{% url 'like_image' %}">
+                                {% csrf_token %}
+
+                                <input type="hidden" id="like_image_input" name="image_id" value="{{ image.id }}">
+
+                                <input type="submit" id="like_btn"
+                                    class="btn btn-link lead text-decoration-none shadow-none" onclick="like('likeBtn{{ image.id }}')" value="👍" />
+
+                            </form>
+                        </div>
+
+                        <!--* number of likes and likers: -->
+                        <div class="col-6 w-auto ">
+                            <strong>
+
+                                {% if image.liker_usernames|length == 0 %}
+                                    {{ image.num_likes }} Likes
+
+                                {% elif image.liker_usernames|length == 1 %}
+                                    {{ image.num_likes }} Like by {{ image.liker_usernames.0 }}.
+
+                                {% elif image.liker_usernames|length == 2 %}
+                                    {{ image.num_likes }} Like by {{ image.liker_usernames.0 }} and {{ image.liker_usernames.1 }}.
+
+                                {% elif image.liker_usernames|length < 4 %} {{ image.num_likes }} Like by 
+                                {{ image.liker_usernames.0 }}, {{ image.liker_usernames.1 }} and {{ image.liker_usernames.2 }}.
+                                    
+                                {% else %}
+                                    {{ image.num_likes }} Likes by <!-- only 3 usernames to be shown: -->
+                                    {% for liker in image.liker_usernames|slice:":2" %}
+                                    {{ liker }},
+                                    {% endfor %}
+                                    {{ image.liker_usernames.2 }}
+
+                                    and others.
+                                    {% endif%}
+
+                            </strong>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- spacer: -->
+            <div class="row my-2"></div>
+        
+            {% endfor %}
         </div>
     </div>
 
-    <!-- spacer: -->
-    <div class="row py-2"></div>
-
-    {% endfor %}
 </div>
 
 {% endblock %}

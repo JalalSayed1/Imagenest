@@ -1,21 +1,22 @@
 from http import HTTPStatus
+
+from django.contrib import auth
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.contrib.auth.models import User
-from django.contrib import auth
-from django.views.decorators.http import require_http_methods, require_GET, require_POST, require_safe
-from django.contrib.auth.forms import AuthenticationForm
 from django.views.decorators.csrf import csrf_protect
-
+from django.views.decorators.http import (require_GET, require_http_methods, require_POST, require_safe)
+from django.http import HttpResponseRedirect
 
 from imagenest import views
 
-from .forms import LoginForm, RegisterForm, ImageUploadForm
-from .models import UserProfile, Image, Like, Submission
+from .forms import ImageUploadForm, LoginForm, RegisterForm
+from .models import Image, Like, Submission, UserProfile
 
 
 @csrf_protect
@@ -82,12 +83,6 @@ def profile(request, user):
     # will need to change view so that it accesses user data through username parameter
     
     images = Image.objects.filter(username=request.user)
-
-    #line just here to remind me that profile page will almost definitely involve .filter() 
-    #images = Post.objects.filter(username=user)
-
-    # image1 = {"url":"https://source.unsplash.com/random?places", "username" :"username1", "likes" : 2, "likers" : ["usename11", "usename11"], 'id':4}
-    # images = {}
     
     profile_image = {"url":"https://source.unsplash.com/250x250?person", "username" :"username1", 'id' : 8}
     
@@ -109,12 +104,6 @@ def top_images(request):
         'images' : images,
         }
 
-    # images contains eg. "image1" : image1
-    # where image1 is a dict contains url, username, likes, likers, id
-    # images = {}
-    # for i in range(len(image_list)):
-    #     images['image'+str(i)] = image_list[i]
-        
     return render(request, "imagenest/top_images.html",  context)
 
 # @login_required
@@ -147,18 +136,6 @@ def suggest_users(username_input):
                 similar_users.add(user.username)
     return list(similar_users)
 
-
-#     if form.is_valid():
-#         # Not done according to the Image Store System paradigm
-#         # Surely can be improved
-#         model = form.save(commit=False)
-#         model.uploader = request.user.userprofile
-#         model.save()
-#         return HttpResponse(status=HTTPStatus.OK)
-#     else:
-#         return HttpResponse(status=HTTPStatus.BAD_REQUEST)
-
-    
 # @require_POST
 @login_required
 def add_picture(request):
@@ -178,36 +155,19 @@ def add_picture(request):
     context = {'upload_form' : upload_form, "uploader" : uploader}
     return render(request, "imagenest/upload.html", context)
 
-    # Check if the user is authenticated
-    # Cannot use login_required because we call this in js,
-    # not showing the error for the users
-    # if not request.user.is_authenticated:
-    #     return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
-
-    # form = ImageUploadForm(request.POST, request.FILES)
-
-    # if form.is_valid():
-    #     # Not done according to the Image Store System paradigm
-    #     # Surely can be improved
-    #     model = form.save(commit=False)
-    #     model.uploader = request.user.userprofile
-    #     model.save()
-    #     return HttpResponse(status=HTTPStatus.OK)
-    # else:
-    #     return HttpResponse(status=HTTPStatus.BAD_REQUEST)
-
 
 @login_required
 def home(request):
-    images = Image.objects.all()
+    
+    images = Image.objects.all().order_by("-creation_time")
     user = request.user
 
     context = {
         'images': images,
         'user': user
     }
-
     return render(request, "imagenest/home.html", context)
+    
 
 
 def like_image(request):
@@ -219,10 +179,11 @@ def like_image(request):
         # add/remove user from likers list: 
         if user in image_obj.likers.all():
             image_obj.likers.remove(user)
-            image_obj.likes -= 1
+            image_obj.sub_like
+
         else:
             image_obj.likers.add(user)
-            image_obj.likes += 1
+            image_obj.add_like
 
         # increment/decrement num of likes of this image:
         like, created = Like.objects.get_or_create(user=user, image_id=image_id)
@@ -232,9 +193,12 @@ def like_image(request):
             else:
                 like.value = 'Like'
 
-        like.save()
-        
-    return redirect(home)
+        # like.save()
+        image_obj.save()
+    
+    # redirect to the prev page:
+    # eg. user at home page (then clicks like button) -> like_image view -> home page again
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 #this is taken from tango w/ django, dk if it actually works here, still needs url
 #mapping, html and ajax attached to it, uses the image url cos we have no form of
@@ -251,7 +215,7 @@ class LikeImage(View):
         except ValueError:
             return HttpResponse(-1)
 
-        image.likes = image.likes + 1
+        image.likes += 1
         image.save()
 
         return HttpResponse(image.likes)

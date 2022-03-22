@@ -33,10 +33,10 @@ class UserProfile(models.Model):
 # Image model for every image in the app except the profile image: 
 class Image(models.Model):
     username = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner')
-    # image = models.ImageField(upload_to ='uploads/')
     url = models.URLField(max_length=200)
     likers = models.ManyToManyField(User, default=None, blank=True, related_name='Likers')
     likes = models.IntegerField(default=0)
+    creation_time = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return str(self.username)
@@ -48,6 +48,14 @@ class Image(models.Model):
     @property
     def liker_usernames(self):
         return [username for username in self.likers.all()]
+
+    @property
+    def add_like(self):
+        self.likes += 1
+
+    @property
+    def sub_like(self):
+        self.likes -= 1
     
 
 
@@ -57,11 +65,12 @@ LIKE_CHOICES = (('Like', 'Like'), ('Unlike', 'Unlike'),)
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ForeignKey(Image, on_delete=models.CASCADE)
+    # value is to like or unlike image:
     value = models.CharField(choices=LIKE_CHOICES,
                              default='Like', max_length=10)
 
     def __str__(self):
-        return self.image
+        return f"{self.image}"
         
 #upload class
 class Submission(models.Model):
