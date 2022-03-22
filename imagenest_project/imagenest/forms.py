@@ -98,9 +98,12 @@ class RegisterForm(forms.ModelForm):
         )
         
 class ImageUploadForm(forms.ModelForm):
+    image_url = forms.URLField(widget=forms.TextInput(
+        attrs={"placeholder": "Image URL", "class": "form-control"}),)
+    
     class Meta:
         model = Submission
-        fields = ['image']
+        fields = ['image_url']
 
 class searchForm(forms.ModelForm):
     name = forms.CharField(max_length=128, )

@@ -159,25 +159,42 @@ def suggest_users(username_input):
 #         return HttpResponse(status=HTTPStatus.BAD_REQUEST)
 
     
-@require_POST
+# @require_POST
+@login_required
 def add_picture(request):
+    
+    uploader = request.user
+
+    if request.method == "POST":
+        upload_form = ImageUploadForm(request.POST, request.FILES)
+        if upload_form.is_valid():
+            image_url = upload_form.cleaned_data.get("image_url")
+            uploaded_image = Image.objects.create(username = uploader, url = image_url)
+            uploaded_image.save()
+            print(uploaded_image)
+            return redirect(home)
+    
+    upload_form = ImageUploadForm()
+    context = {'upload_form' : upload_form, "uploader" : uploader}
+    return render(request, "imagenest/upload.html", context)
+
     # Check if the user is authenticated
     # Cannot use login_required because we call this in js,
     # not showing the error for the users
-    if not request.user.is_authenticated:
-        return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
+    # if not request.user.is_authenticated:
+    #     return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
 
-    form = ImageUploadForm(request.POST, request.FILES)
+    # form = ImageUploadForm(request.POST, request.FILES)
 
-    if form.is_valid():
-        # Not done according to the Image Store System paradigm
-        # Surely can be improved
-        model = form.save(commit=False)
-        model.uploader = request.user.userprofile
-        model.save()
-        return HttpResponse(status=HTTPStatus.OK)
-    else:
-        return HttpResponse(status=HTTPStatus.BAD_REQUEST)
+    # if form.is_valid():
+    #     # Not done according to the Image Store System paradigm
+    #     # Surely can be improved
+    #     model = form.save(commit=False)
+    #     model.uploader = request.user.userprofile
+    #     model.save()
+    #     return HttpResponse(status=HTTPStatus.OK)
+    # else:
+    #     return HttpResponse(status=HTTPStatus.BAD_REQUEST)
 
 
 @login_required

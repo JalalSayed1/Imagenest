@@ -36,7 +36,7 @@ urlpatterns = [
     path("profile/", views.profile, name="profile"),
     path("topimages/", views.top_images, name="top_images"),
     path("search/", views.search, name="search"),
-    #path("upload/", views.upload, name ="upload"),
+    path("upload/", views.add_picture, name ="upload"),
     path("like/", views.like_image, name ="like_image"),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

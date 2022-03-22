@@ -65,7 +65,7 @@ class Like(models.Model):
         
 #upload class
 class Submission(models.Model):
-    image = models.ImageField(upload_to='images/')
+    image = models.ForeignKey(Image, on_delete=models.CASCADE)
     uploader = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     creation_time = models.DateTimeField(auto_now_add=True)
 

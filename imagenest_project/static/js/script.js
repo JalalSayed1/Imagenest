@@ -25,6 +25,7 @@ $(document).on('submit', '#like_button_form', function (e) {
         type: 'POST',
         data: {
             task: $("#like_image_input").val(),
+            // submit the form (like an image):
             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
         },
     })

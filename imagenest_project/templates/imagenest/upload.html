@@ -1,4 +1,4 @@
-{% extends 'imagenest/base.html' %}
+{% extends 'imagenest/menu_pages_template.html' %}
 {% load staticfiles %}
 
 <!--* Head: -->
@@ -6,34 +6,26 @@
 Upload picture
 {% endblock %}
 
-<!--* Form: -->
-{% block form_block %}
-<form id="uploadForm" method="get" action="upload/">
-	{% csrf_token %}
-	{% for field in form.visible_fields %}
-		{{ field.errors }}
-		{{ field.help_text }}
-		{{ field }}
-	{% endfor %}
+{% block under_menu_inside_a_row %}
+
+<h1>Upload new image as @{{ uploader }}:</h1>
+
+<form id="uploadForm" method="POST"> 
+    {% csrf_token %}
+    {% for hidden in upload_form.hidden_fields %}
+        {{hidden}}
+    {% endfor %}
+    
+    {% for field in upload_form.visible_fields %}
+        {{ field.errors }}
+        {{ field.help_text }}
+        {{ field }}
+    {% endfor %}
+
+    <input type="submit" class="form-control btn-primary" name="submit" value="Upload" />
 </form>
-{% endblock %}
 
-{% block content %}  
-	<div class="upload">
-		<!--Simple Form-->
-        <h2>Upload Image</h2>
-        <form method="post">
-        	{% csrf_token %}
-        	<input type="file" name="image" accept="image/*">
-            <br>
-			<input type="text" name = "caption">
-        </form>
-	</div>
+
+
 
 {% endblock %}
-
-
-<!--* Submit button and message: -->
-{% block primary_btn_block %}
-<button class="btn btn-primary" type="submit">Upload</button>
-{% endblock %}>
