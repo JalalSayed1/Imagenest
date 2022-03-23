@@ -32,7 +32,7 @@ ImageNest -
                         <a class="nav-item nav-link {% block activate_home_tab %}{% endblock %}"
                             href="{% url 'home' %}">Home</a>
                         <a class="nav-item nav-link {% block activate_profile_tab %}{% endblock %}"
-                            href="{% url 'profile' %}">Profile</a>
+                            href="{% url 'profile' user %}">Profile</a>
                         <a class="nav-item nav-link {% block activate_top_images_tab %}{% endblock %}"
                             href="{% url 'top_images' %}">Top Images</a>
                         <a class="nav-item nav-link" href="{% url 'logout' %}" role='button'>Log Out</a>

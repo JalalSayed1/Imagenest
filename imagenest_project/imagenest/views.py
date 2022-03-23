@@ -78,39 +78,22 @@ def logout(request):
 
 
 @login_required
-def profile(request):
-    # changed the urls so that their profile page will be at /profile/username
-    # will need to change view so that it accesses user data through username parameter
-    #username = UserProfile.objects.get(username=request.user)
-    images = Image.objects.filter(username=request.user)
-    
-    profile_image = {"url":"https://source.unsplash.com/250x250?person", "username" :"username1", 'id' : 8}
-
-    context = {
-        "images" : images,
-        "profile_image" : profile_image
-        }
-    
-    return render(request, "imagenest/profile.html", context)
-
-
-@login_required
-def get_profile(request, user):
+def profile(request, user):
     try:
         profile = UserProfile.objects.get(username=user)
         user = profile.user
         #profile_image = profile.profile_image
-        username = profile.username
-        images = Image.objects.all().filter(username=user)     
+        images = Image.objects.all().filter(username=user).order_by("-creation_time")    
     except UserProfile.DoesNotExist:
         profile = None
         images = None
+        
+    profile_image = {"url":"https://source.unsplash.com/250x250?person", "username" :"username1", 'id' : 8}
 
     context_dict = {
         "images" : images,
         "profile" : profile,
-        #"profile_image" : profile_image,
-        "username" : username
+        "profile_image" : profile_image,
         }
     return render(request, "imagenest/profile.html", context_dict)
 
@@ -234,22 +217,4 @@ def like_image(request):
     # eg. user at home page (then clicks like button) -> like_image view -> home page again
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-#this is taken from tango w/ django, dk if it actually works here, still needs url
-#mapping, html and ajax attached to it, uses the image url cos we have no form of
-#image id.
-class LikeImage(View):
-    @method_decorator(login_required)
-    def get(self, request):
-        image_id = request.GET['url']
 
-        try:
-            image = Post.objects.get(id = image_id)
-        except Image.DoesNotExist:
-            return HttpResponse(-1)
-        except ValueError:
-            return HttpResponse(-1)
-
-        image.likes += 1
-        image.save()
-
-        return HttpResponse(image.likes)
