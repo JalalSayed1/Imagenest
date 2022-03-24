@@ -138,9 +138,9 @@ def suggest_users(username_input):
     similar_users = set()
 
     if username_input is not None:
-        for i in range(1, len(username_input)):
+        for character in range(1, len(username_input)):
             # remove the last letter of the username on each iteration
-            shortened_username = username_input[:-i] 
+            shortened_username = username_input[:-character] 
 
              # check whether another username starts with the same string
             users_found = User.objects.filter(username__startswith=shortened_username)
