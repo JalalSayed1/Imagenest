@@ -41,7 +41,7 @@ Search
                 {% else %}
                     User not found.
 
-                    {% if areSimilarUsers %}
+                    {% if areSimilarUsers is True %}
                         Did you mean: </br>
                         <ul class="list-group">
                         {% for user in results %}
