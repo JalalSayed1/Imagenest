@@ -135,6 +135,7 @@ def search(request):
 
 
 def suggest_users(username_input):
+    #suggests users for the search based on the usernames in the database
     similar_users = set()
 
     if username_input is not None:
