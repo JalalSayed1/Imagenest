@@ -35,7 +35,7 @@ Search
             {% if searchHasBeenUsed is True %}
 
                 {% if userIsFound is True %}
-                    <a href="{% url 'profile' results %}">{{ results }}</a>
+                    <a href="{% url 'profile' results %}" class="list-group-item list-group-item-action">{{ results }}</a>
 
                 {% else %}
                     User not found.

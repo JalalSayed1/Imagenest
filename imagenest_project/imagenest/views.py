@@ -104,9 +104,7 @@ def top_images(request):
     #is now fixed
     images = Image.objects.all().order_by("-likes")[:10]
 
-    context = {
-        'images' : images,
-        }
+    context = {'images' : images,}
 
     return render(request, "imagenest/top_images.html",  context)
 
