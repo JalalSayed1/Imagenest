@@ -60,7 +60,6 @@ def register(request):
             user.set_password(password)
             user.save()
             
-            # auth.login(request, user)
             return redirect(login)
         else:
             print('invalid info')

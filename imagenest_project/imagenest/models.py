@@ -24,7 +24,7 @@ class UserProfile(models.Model):
         max_length=USERNAME_MAX_LENGTH, unique=True)
     password = models.CharField(max_length=PASSWORD_MAX_LENGTH, blank=True)
         
-# Image model for every image in the app except the profile image: 
+        
 class Image(models.Model):
     username = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner')
     url = models.URLField(max_length=200)
