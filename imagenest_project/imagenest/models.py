@@ -8,6 +8,7 @@ from django.utils import timezone
 
 USERNAME_MAX_LENGTH = 15
 PASSWORD_MAX_LENGTH = 40
+URL_MAX_LENGTH = 200
 
 
 class Register(models.Model):
@@ -16,16 +17,16 @@ class Register(models.Model):
     username = models.CharField(max_length=USERNAME_MAX_LENGTH, unique=True)
     password = models.CharField(max_length=PASSWORD_MAX_LENGTH, blank=True)
 
-
 #class UserProfile(models.Model):
   #  user = models.OneToOneField(User, on_delete=models.CASCADE)
    # username = models.CharField(max_length=USERNAME_MAX_LENGTH, unique=True)
      
 class Image(models.Model):
-    url = models.URLField(max_length=200, blank=True)
+    url = models.URLField(max_length=URL_MAX_LENGTH, blank=True)
     file = models.ImageField(upload_to='uploaded/', blank=True)
 
     username = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner')
+
     likers = models.ManyToManyField(User, default=None, blank=True, related_name='Likers')
     likes = models.IntegerField(default=0)
     creation_time = models.DateTimeField(auto_now_add=True)
