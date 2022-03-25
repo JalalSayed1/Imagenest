@@ -108,7 +108,8 @@ class ImageUploadForm(forms.ModelForm):
         fields = ['image_url', 'image_file']
 
 class SearchForm(forms.ModelForm):
-    username = forms.CharField(max_length=128, )
+    username = forms.CharField(max_length=128, 
+                               widget=forms.TextInput(attrs={"placeholder": "Username", "class": "form-control"}), )
 
     class Meta:
         model = User
