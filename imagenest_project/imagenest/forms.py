@@ -29,10 +29,7 @@ class LoginForm(forms.Form):
 
     class Meta:
         model = User
-        fields = (
-            "username",
-            "password",
-        )
+        fields = ["username", "password",]
 
 
 class RegisterForm(forms.ModelForm):
@@ -89,21 +86,21 @@ class RegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = (
-            "firstname",
-            "surname",
-            "username",
-            "password",
-            "confirm_password",
-        )
+        fields = ["firstname", "surname", "username", "password", "confirm_password",]
         
 class ImageUploadForm(forms.ModelForm):
-    image_url = forms.URLField(widget=forms.TextInput(
-        attrs={"placeholder": "Image URL", "class": "form-control"}),)
+    image_url = forms.URLField(widget=forms.TextInput(attrs={"placeholder": "Image URL"}), required=False)
+    image_file = forms.ImageField(required=False)
+
+    # add a class to each visible field in this form (styling): 
+    def __init__(self, *args, **kwargs):
+        super(ImageUploadForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
     
     class Meta:
         model = Submission
-        fields = ['image_url']
+        fields = ['image_url', 'image_file']
 
 class searchForm(forms.ModelForm):
     name = forms.CharField(max_length=128, )

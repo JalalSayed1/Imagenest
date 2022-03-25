@@ -9,32 +9,45 @@ Upload picture
 
 <div class="row my-5 mx-auto">
 
-    <div class="row my-4">
+    <div class="row my-4 mx-auto w-50">
         <div class="col">
             <h1>Upload image as @{{ uploader }}:</h1>
         </div>
     </div>
 
-    <form id="upload_form" method="POST">
-        <div class="row my-4 g-2">
-            <div class="col-9 h-100">
+    <form id="upload_form" method="POST" action="{% url 'upload' %}" enctype="multipart/form-data">
+        <div class="row my-4 mx-auto w-50">
+            <div class="col h-100">
                 {% csrf_token %}
                 {% for hidden in upload_form.hidden_fields %}
                 {{hidden}}
                 {% endfor %}
 
+
+                <div class="py-1">Upload via:</div>
                 {% for field in upload_form.visible_fields %}
-                {{ field.errors }}
-                {{ field.help_text }}
-                {{ field }}
+                <div class="col mb-2">
+                    {{ field.errors }}
+                    {{ field.help_text }}
+                    {{ field }}
+
+                    <!-- display "Or" only once; in between the 2 fields: -->
+                    {% if forloop.counter == 1 %}
+                        <div class="py-1"> Or </div>
+                    {% endif %}
+
+                </div>
                 {% endfor %}
             </div>
 
-            <div class="col-3 h-100">
+        </div>
+
+        <div class="row w-50 mx-auto">
+            <div class="col">
                 <input type="submit" class="form-control btn-primary" name="submit" value="Upload" />
             </div>
-
         </div>
+
     </form>
 </div>
 {% endblock %}

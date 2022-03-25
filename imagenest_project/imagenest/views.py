@@ -150,7 +150,6 @@ def suggest_users(username_input):
 
     return list(similar_users) # return the set as a list
 
-# @require_POST
 @login_required
 def add_picture(request):
     
@@ -159,12 +158,15 @@ def add_picture(request):
     if request.method == "POST":
         upload_form = ImageUploadForm(request.POST, request.FILES)
         if upload_form.is_valid():
+            upload_form.save(commit=False)
             image_url = upload_form.cleaned_data.get("image_url")
-            uploaded_image = Image.objects.create(username = uploader, url = image_url)
+            image_file = upload_form.cleaned_data.get("image_file")
+            uploaded_image = Image.objects.create(
+                username=uploader, url=image_url, file=image_file)
             uploaded_image.save()
-            print(uploaded_image)
+            
             return redirect(home)
-    
+
     upload_form = ImageUploadForm()
     context = {'upload_form' : upload_form, "uploader" : uploader}
     return render(request, "imagenest/upload.html", context)

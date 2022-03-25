@@ -81,7 +81,13 @@ ImageNest -
                     <div class="row ">
                         <div class="col">
                             {% block image_block %}
-                            <img class="img-fluid d-block w-100" src="{{ image.url }}">
+                            {% if image %}
+                                {% if image.url %}
+                                    <img class="img-fluid d-block w-100" src="{{ image.url }}">
+                                {% elif image.file %}
+                                    <img class="img-fluid d-block w-100" src="{{MEDIA_URL}}{{ image.file }}">
+                                {% endif %}
+                            {% endif %}
                             {% endblock %}
                         </div>
                     </div>

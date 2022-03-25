@@ -1,3 +1,5 @@
+from distutils.command.upload import upload
+from email.policy import default
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
@@ -26,8 +28,10 @@ class UserProfile(models.Model):
         
         
 class Image(models.Model):
+    url = models.URLField(max_length=200, blank=True)
+    file = models.ImageField(upload_to='uploaded/', blank=True)
+
     username = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner')
-    url = models.URLField(max_length=200)
     likers = models.ManyToManyField(User, default=None, blank=True, related_name='Likers')
     likes = models.IntegerField(default=0)
     creation_time = models.DateTimeField(auto_now_add=True)
