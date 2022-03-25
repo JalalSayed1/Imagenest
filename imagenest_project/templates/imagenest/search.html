@@ -16,18 +16,16 @@ Search
         </div>
     </div>
 
-
-
     <form id="search_form" action="{% url 'search' %}" method="GET">
         {% csrf_token %}
-        <div class="row my-2 g-2">
+        <div class="row my-4 g-2">
             <div class="col">
                 {% for field in form.visible_fields %}
                     {{ field }}
                 {% endfor %}
             </div>
             <div class="col-3 h-100">
-                <input type="submit" class="form-control btn-primary" name="submit" value="Search" />
+                <input type="submit" class="form-control btn-dark" name="submit" value="Search" />
             </div>
         </div>
     </form>

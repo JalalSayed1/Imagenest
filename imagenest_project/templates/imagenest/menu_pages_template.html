@@ -19,11 +19,10 @@ ImageNest -
     <div class="row">
         <div class="col">
             <nav class="navbar navbar-expand-lg navbar-light p-4">
-                <!-- hyper link to the current page -->
-                <a class="navbar-brand" href="./">
+                <a id="logo" class="navbar-brand" href="{% url 'home' %}">
                     <img src="{% static 'images/ImageNest Logo.png' %}" width="30" height="30"
                         class="d-inline-block align-top" alt="ImageNest logo">
-                    ImageNest
+                    <span id="logo-text">ImageNest</span>
                 </a>
 
                 <div class="collapse navbar-collapse" id="headerMenu">
@@ -41,10 +40,10 @@ ImageNest -
 
                 <!--* Search function: -->
                 <div class="float-end mx-1">
-                    <a href="{% url 'search' %}" class="btn btn-outline-primary">Search</a>
-                    <a href="{% url 'upload' %}" class="btn btn-primary">Add Picture</a>
+                    <a href="{% url 'search' %}" class="btn btn-outline-dark">Search</a>
+                    <a href="{% url 'upload' %}" class="btn btn-dark">Add Picture</a>
                 </div>
-
+                <div class="test"></div>
             </nav>
         </div>
     </div>
@@ -68,24 +67,24 @@ ImageNest -
 
             <div class="row w-100">
                 <!--* username column: -->
-                <div class="col-3 text-end">
+                <div class="col-3 text-end lead">
                     {% block col1_block %}
                         {% if image %}
-                        By @{{ image.username }}
+                        By @<span class="underline">{{ image.username }}</span>
                         {% endif %}
                     {% endblock %}
                 </div>
 
                 <!--* image column: -->
                 <div class="col-6 my-1">
-                    <div class="row ">
-                        <div class="col">
+                    <div class="row">
+                        <div id="image-col" class="col">
                             {% block image_block %}
                             {% if image %}
                                 {% if image.url %}
-                                    <img class="img-fluid d-block w-100" src="{{ image.url }}">
+                                    <img draggable="false" class="img-fluid d-block w-100" src="{{ image.url }}">
                                 {% elif image.file %}
-                                    <img class="img-fluid d-block w-100" src="{{MEDIA_URL}}{{ image.file }}">
+                                    <img draggable="false" class="img-fluid d-block w-100" src="{{MEDIA_URL}}{{ image.file }}">
                                 {% endif %}
                             {% endif %}
                             {% endblock %}
@@ -108,7 +107,7 @@ ImageNest -
                         </div>
 
                         <!--* number of likes and likers: -->
-                        <div class="col-6 w-auto ">
+                        <div class="col-6 w-auto mx-md-2">
                             <strong>
 
                                 {% if image.liker_usernames|length == 0 %}

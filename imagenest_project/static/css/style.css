@@ -1,7 +1,27 @@
+:root {
+  --main-color: #FFC414;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+
+}
+
+*::selection {
+  background-color: var(--main-color);
+  color: whitesmoke;
+}
+
+.form-control:focus, .form-control:hover, .form-control:active:hover, .form-control:active:focus {
+  /* add custom glow effect to forms: */
+  box-shadow: 3px 4px 19px 3px rgba(0, 0, 0, 0.57);
+}
+
+.btn:active, .btn:focus, .btn:hover, .btn:active:focus, .btn:active:hover {
+  /* remove bootstrap glow effect: */
+  box-shadow: none;
 }
 
 .circle-img {
@@ -16,12 +36,65 @@
   margin-left: 50%;
 }
 
-.black_and_white{
+.black_and_white {
   filter: grayscale(100%);
 }
 
-.black_and_white:hover{
+.black_and_white:hover {
   filter: grayscale(0%);
   transition: 500ms;
 }
 
+.underline {
+  text-decoration: underline var(--main-color);
+}
+
+.navbar-nav a {
+  text-decoration: underline transparent 2px;
+  transition: all 500ms linear;
+}
+
+.navbar-nav a:hover {
+  color: var(--main-color);
+  text-decoration-color: var(--main-color);
+  transition: 500ms linear;
+  font-size: 16px;
+}
+
+#like_btn:hover, #like_btn:focus {
+  animation: pulse 2s infinite;
+  cursor: default;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+  }
+
+  25% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+  }
+
+  50% {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+  }
+
+  75% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+  }
+
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
+#logo-text:hover {
+  text-shadow: var(--main-color) 3px 12px;
+  /* box-shadow: 3px -6px 82px 8px rgba(0, 0, 0, 0.71); */
+  transition: all 500ms linear;
+}
