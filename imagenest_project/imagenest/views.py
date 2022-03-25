@@ -16,7 +16,7 @@ from django.http import HttpResponseRedirect
 from imagenest import views
 
 from .forms import ImageUploadForm, LoginForm, RegisterForm, SearchForm
-from .models import Image, Like, Submission, UserProfile
+from .models import Image, Like, Submission
 
 
 @csrf_protect
@@ -79,20 +79,21 @@ def logout(request):
 @login_required
 def profile(request, user):
     try:
-        profile = UserProfile.objects.get(username=user)
-        user = profile.user
+        profile = User.objects.get(username=user)
         #profile_image = profile.profile_image
-        images = Image.objects.all().filter(username=user).order_by("-creation_time")    
-    except UserProfile.DoesNotExist:
+        images = Image.objects.all().filter(username=profile).order_by("-creation_time")
+        error = None
+    except User.DoesNotExist:
         profile = None
         images = None
-        
+        error = "Error: User does not exist"
     profile_image = {"url":"https://source.unsplash.com/250x250?person", "username" :"username1", 'id' : 8}
 
     context_dict = {
         "images" : images,
         "profile" : profile,
         "profile_image" : profile_image,
+        "error" : error,
         }
     return render(request, "imagenest/profile.html", context_dict)
 

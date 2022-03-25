@@ -107,11 +107,11 @@ def add_user_and_profile(firstname, surname, username, password):
     user.save()
 
     # create UserProfile object using the parameters
-    userProfile = UserProfile.objects.get_or_create(user=user, firstname=firstname, surname=surname, username=username)[0]
-    userProfile.firstname = firstname
-    userProfile.surname = surname
-    userProfile.password = password
-    userProfile.save()
+    #userProfile = UserProfile.objects.get_or_create(user=user, firstname=firstname, surname=surname, username=username)[0]
+    #userProfile.firstname = firstname
+    #userProfile.surname = surname
+    #userProfile.password = password
+    #userProfile.save()
 
     return user
 

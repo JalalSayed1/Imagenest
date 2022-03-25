@@ -29,7 +29,11 @@ Profile
             </div>
         </div>
         <div class="h2 w-100 col-3 m-5 text-center">
-            {{ profile.username }}
+			{% if profile %}
+				{{ profile.username }}
+			{% else %}	
+				{{ error }}
+			{% endif %}
         </div>
     </div>
 	{% endif %}
