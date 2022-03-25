@@ -15,8 +15,8 @@ from django.http import HttpResponseRedirect
 
 from imagenest import views
 
-from .forms import ImageUploadForm, LoginForm, RegisterForm
-from .models import Image, Like, Submission, UserProfile
+from .forms import ImageUploadForm, LoginForm, RegisterForm, SearchForm
+from .models import Image, Like, Submission
 
 
 @csrf_protect
@@ -79,20 +79,21 @@ def logout(request):
 @login_required
 def profile(request, user):
     try:
-        profile = UserProfile.objects.get(username=user)
-        user = profile.user
+        profile = User.objects.get(username=user)
         #profile_image = profile.profile_image
-        images = Image.objects.all().filter(username=user).order_by("-creation_time")    
-    except UserProfile.DoesNotExist:
+        images = Image.objects.all().filter(username=profile).order_by("-creation_time")
+        error = None
+    except User.DoesNotExist:
         profile = None
         images = None
-        
+        error = "Error: User does not exist"
     profile_image = {"url":"https://source.unsplash.com/250x250?person", "username" :"username1", 'id' : 8}
 
     context_dict = {
         "images" : images,
         "profile" : profile,
         "profile_image" : profile_image,
+        "error" : error,
         }
     return render(request, "imagenest/profile.html", context_dict)
 
@@ -110,7 +111,7 @@ def top_images(request):
 @login_required
 def search(request):
     # set up the context_dict with default values
-    context_dict = {"searchHasBeenUsed": False, "userIsFound": False, "areSimilarUsers": False, "results":[]}
+    context_dict = {"form": SearchForm(), "searchHasBeenUsed": False, "userIsFound": False, "areSimilarUsers": False, "results":[]}
 
     # if a value for the username has been defined
     if request.method == "GET" and request.GET.get("username"):
@@ -135,12 +136,13 @@ def search(request):
 
 
 def suggest_users(username_input):
+    #suggests users for the search based on the usernames in the database
     similar_users = set()
 
     if username_input is not None:
-        for i in range(1, len(username_input)):
+        for counter in range(1, len(username_input)):
             # remove the last letter of the username on each iteration
-            shortened_username = username_input[:-i] 
+            shortened_username = username_input[:-counter] 
 
              # check whether another username starts with the same string
             users_found = User.objects.filter(username__startswith=shortened_username)

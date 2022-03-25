@@ -17,16 +17,10 @@ class Register(models.Model):
     password = models.CharField(max_length=PASSWORD_MAX_LENGTH, blank=True)
 
 
-class UserProfile(models.Model):
-
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    firstname = models.CharField(max_length=USERNAME_MAX_LENGTH, blank=True)
-    surname = models.CharField(max_length=USERNAME_MAX_LENGTH, blank=True)
-    username = models.CharField(
-        max_length=USERNAME_MAX_LENGTH, unique=True)
-    password = models.CharField(max_length=PASSWORD_MAX_LENGTH, blank=True)
-        
-        
+#class UserProfile(models.Model):
+  #  user = models.OneToOneField(User, on_delete=models.CASCADE)
+   # username = models.CharField(max_length=USERNAME_MAX_LENGTH, unique=True)
+     
 class Image(models.Model):
     url = models.URLField(max_length=200, blank=True)
     file = models.ImageField(upload_to='uploaded/', blank=True)
@@ -73,11 +67,11 @@ class Like(models.Model):
 #upload class
 class Submission(models.Model):
     image = models.ForeignKey(Image, on_delete=models.CASCADE)
-    uploader = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    uploader = models.ForeignKey(User, on_delete=models.CASCADE)
     creation_time = models.DateTimeField(auto_now_add=True)
 
     like_count = models.PositiveIntegerField(default=0)
-    likers = models.ManyToManyField(UserProfile, related_name="favorites")
+    likers = models.ManyToManyField(User, related_name="favorites")
 
     class Meta:
         ordering = ['-creation_time']
