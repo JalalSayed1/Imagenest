@@ -35,10 +35,12 @@ def login(request):
                     auth.login(request, user)
                     return redirect(home)
             else:
+                # todo: add error message
                 print('invalid login details')
                 return render(request, "imagenest/login.html", {"login_form": login_form, "error": f"Invalid login details: {username}, {password}"})
             
         else:
+            # todo: add error message
             print('invalid info') 
             print(login_form.errors)
                 
@@ -62,6 +64,7 @@ def register(request):
             
             return redirect(login)
         else:
+            # todo: add error message
             print('invalid info')
             return render(request, "imagenest/register.html", {"register_form": register_form})
 
@@ -165,14 +168,15 @@ def add_picture(request):
             upload_form.save(commit=False)
             image_url = upload_form.cleaned_data.get("image_url")
             image_file = upload_form.cleaned_data.get("image_file")
-            print(image_url)
-            print(image_file)
+            
             if (len(image_url) > 0) and (image_file is not None):
                 context['error_message'] = "Please specify only one way to upload an image."
+                
             elif (len(image_url) > 0) or (image_file is not None):
                 uploaded_image = Image.objects.create(username=uploader, url=image_url, file=image_file)
                 uploaded_image.save()
                 return redirect(home)
+            
             else:
                 context['error_message'] = "Please enter a valid URL or upload a file then try again."
 

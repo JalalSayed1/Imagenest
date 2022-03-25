@@ -23,8 +23,10 @@
 <body>
 {% block without_anything %}
     <div class="container position-relative min-vw-100 min-vh-100">
+        <div class="row position-relative">
         {% block body_block %}
         {% endblock %}
+        </div>
     </div>
 {% endblock %}
 
