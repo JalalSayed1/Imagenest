@@ -16,7 +16,6 @@ class Register(models.Model):
 
 
 class UserProfile(models.Model):
-
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     firstname = models.CharField(max_length=USERNAME_MAX_LENGTH, blank=True)
     surname = models.CharField(max_length=USERNAME_MAX_LENGTH, blank=True)

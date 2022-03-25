@@ -16,14 +16,12 @@ Search
         </div>
     </div>
 
+
+
     <form id="search_form" action="{% url 'search' %}" method="GET">
         {% csrf_token %}
-
-        <div class="row my-4 g-2">
-            <div class="col-9 h-100">
-                <input type="text" class="form-control" name="username" value="" size="50" />
-            </div>
-
+        <div class="row my-4 g-2"></div>
+            {{ form }}
             <div class="col-3 h-100">
                 <input type="submit" class="form-control btn-primary" name="submit" value="Search" />
             </div>

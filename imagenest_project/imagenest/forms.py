@@ -89,13 +89,12 @@ class RegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = (
+        fields = [
             "firstname",
             "surname",
             "username",
             "password",
-            "confirm_password",
-        )
+            "confirm_password" ]
         
 class ImageUploadForm(forms.ModelForm):
     image_url = forms.URLField(widget=forms.TextInput(
@@ -105,5 +104,9 @@ class ImageUploadForm(forms.ModelForm):
         model = Submission
         fields = ['image_url']
 
-class searchForm(forms.ModelForm):
-    name = forms.CharField(max_length=128, )
+class SearchForm(forms.ModelForm):
+    username = forms.CharField(max_length=128, )
+
+    class Meta:
+        model = User
+        fields = ["username"]

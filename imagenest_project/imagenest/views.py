@@ -15,7 +15,7 @@ from django.http import HttpResponseRedirect
 
 from imagenest import views
 
-from .forms import ImageUploadForm, LoginForm, RegisterForm
+from .forms import ImageUploadForm, LoginForm, RegisterForm, SearchForm
 from .models import Image, Like, Submission, UserProfile
 
 
@@ -110,7 +110,7 @@ def top_images(request):
 @login_required
 def search(request):
     # set up the context_dict with default values
-    context_dict = {"searchHasBeenUsed": False, "userIsFound": False, "areSimilarUsers": False, "results":[]}
+    context_dict = {"form": SearchForm(), "searchHasBeenUsed": False, "userIsFound": False, "areSimilarUsers": False, "results":[]}
 
     # if a value for the username has been defined
     if request.method == "GET" and request.GET.get("username"):
@@ -139,9 +139,9 @@ def suggest_users(username_input):
     similar_users = set()
 
     if username_input is not None:
-        for character in range(1, len(username_input)):
+        for counter in range(1, len(username_input)):
             # remove the last letter of the username on each iteration
-            shortened_username = username_input[:-character] 
+            shortened_username = username_input[:-counter] 
 
              # check whether another username starts with the same string
             users_found = User.objects.filter(username__startswith=shortened_username)
