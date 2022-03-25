@@ -156,6 +156,8 @@ def suggest_users(username_input):
 def add_picture(request):
     
     uploader = request.user
+    upload_form = ImageUploadForm()
+    context = {'upload_form' : upload_form, "uploader" : uploader}
 
     if request.method == "POST":
         upload_form = ImageUploadForm(request.POST, request.FILES)
@@ -163,14 +165,17 @@ def add_picture(request):
             upload_form.save(commit=False)
             image_url = upload_form.cleaned_data.get("image_url")
             image_file = upload_form.cleaned_data.get("image_file")
-            uploaded_image = Image.objects.create(
-                username=uploader, url=image_url, file=image_file)
-            uploaded_image.save()
-            
-            return redirect(home)
+            print(image_url)
+            print(image_file)
+            if (len(image_url) > 0) and (image_file is not None):
+                context['error_message'] = "Please specify only one way to upload an image."
+            elif (len(image_url) > 0) or (image_file is not None):
+                uploaded_image = Image.objects.create(username=uploader, url=image_url, file=image_file)
+                uploaded_image.save()
+                return redirect(home)
+            else:
+                context['error_message'] = "Please enter a valid URL or upload a file then try again."
 
-    upload_form = ImageUploadForm()
-    context = {'upload_form' : upload_form, "uploader" : uploader}
     return render(request, "imagenest/upload.html", context)
 
 

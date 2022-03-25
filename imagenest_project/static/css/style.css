@@ -1,12 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo&display=swap');
+
 :root {
   --main-color: #FFC414;
 }
+
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-
 }
 
 *::selection {

@@ -7,16 +7,16 @@ Upload picture
 
 {% block under_menu_inside_a_row %}
 
-<div class="row my-5 mx-auto">
+<div class="row my-5 mx-auto w-50">
 
-    <div class="row my-4 mx-auto w-50">
+    <div class="row my-4 mx-auto">
         <div class="col">
             <h1>Upload image as @<span class="underline">{{ uploader }}</span>:</h1>
         </div>
     </div>
 
     <form id="upload_form" method="POST" action="{% url 'upload' %}" enctype="multipart/form-data">
-        <div class="row my-4 mx-auto w-50">
+        <div class="row my-4 mx-auto">
             <div class="col h-100">
                 {% csrf_token %}
                 {% for hidden in upload_form.hidden_fields %}
@@ -42,12 +42,21 @@ Upload picture
 
         </div>
 
-        <div class="row w-50 mx-auto">
+        <div class="row mx-auto">
             <div class="col">
                 <input type="submit" class="form-control btn-dark" name="submit" value="Upload" />
             </div>
         </div>
-
     </form>
+
+    <div class="row mx-auto my-3">
+        <div class="col text-danger">
+            {% if error_message %}
+                {{ error_message }}
+            {% endif %}
+        </div>
+    </div>
+    
+
 </div>
 {% endblock %}
