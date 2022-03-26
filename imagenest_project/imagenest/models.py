@@ -9,7 +9,7 @@ from django.utils import timezone
 USERNAME_MAX_LENGTH = 15
 PASSWORD_MAX_LENGTH = 40
 URL_MAX_LENGTH = 200
-
+CAPTION_MAX_LENGTH = 200
 
 class Register(models.Model):
     firstname = models.CharField(max_length=USERNAME_MAX_LENGTH, blank=True)
@@ -24,6 +24,7 @@ class Register(models.Model):
 class Image(models.Model):
     url = models.URLField(max_length=URL_MAX_LENGTH, blank=True)
     file = models.ImageField(upload_to='uploaded/', blank=True)
+    caption = models.CharField(max_length=CAPTION_MAX_LENGTH)
 
     username = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner')
 
@@ -32,7 +33,7 @@ class Image(models.Model):
     creation_time = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return str(self.username)
+        return str(self.username, self.caption)
     
     @property
     def num_likes(self):

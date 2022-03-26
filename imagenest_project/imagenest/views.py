@@ -167,7 +167,8 @@ def add_picture(request):
     
     uploader = request.user
     upload_form = ImageUploadForm()
-    context = {'upload_form' : upload_form, "uploader" : uploader}
+    caption = ImageUploadForm()
+    context = {'upload_form' : upload_form, "uploader" : uploader, "caption" : caption}
 
     if request.method == "POST":
         upload_form = ImageUploadForm(request.POST, request.FILES)
@@ -175,6 +176,7 @@ def add_picture(request):
             upload_form.save(commit=False)
             image_url = upload_form.cleaned_data.get("image_url")
             image_file = upload_form.cleaned_data.get("image_file")
+            user_caption = upload_form.cleaned_data.get("user_caption")
             
             # if user specified both url and file:
             if (len(image_url) > 0) and (image_file is not None):

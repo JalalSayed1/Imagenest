@@ -84,6 +84,7 @@ class RegisterForm(forms.ModelForm):
 class ImageUploadForm(forms.ModelForm):
     image_url = forms.URLField(widget=forms.TextInput(attrs={"placeholder": "Image URL"}), required=False)
     image_file = forms.ImageField(required=False)
+    image_caption = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Caption"}), required=False)
 
     # add a class to each visible field in this form (styling): 
     def __init__(self, *args, **kwargs):
@@ -93,7 +94,7 @@ class ImageUploadForm(forms.ModelForm):
     
     class Meta:
         model = Submission
-        fields = ['image_url', 'image_file']
+        fields = ['image_url', 'image_file', 'image_caption']
 
 class SearchForm(forms.ModelForm):
     username = forms.CharField(max_length=128, 
