@@ -62,87 +62,96 @@ ImageNest -
                 </div>
             </div>
 
+            {% if images %}
+                {% for image in images %}
 
-            {% for image in images %}
-
-            <div class="row w-100">
-                <!--* username column: -->
-                <div class="col-3 text-end lead">
-                    {% block col1_block %}
-                        {% if image %}
-                            By @<span class="underline">{{ image.username }}</span>
-                        {% endif %}
-                    {% endblock %}
-                </div>
-
-                <!--* image column: -->
-                <div class="col-6 my-1">
-                    <div class="row">
-                        <div id="image-col" class="col">
-                            {% block image_block %}
+                <div class="row w-100">
+                    <!--* username column: -->
+                    <div class="col-3 text-end lead">
+                        {% block col1_block %}
                             {% if image %}
-                                {% if image.url %}
-                                    <img draggable="false" class="img-fluid d-block w-100" src="{{ image.url }}">
-                                {% elif image.file %}
-                                    <img draggable="false" class="img-fluid d-block w-100" src="{{MEDIA_URL}}{{ image.file }}">
-                                {% endif %}
+                                By @<span class="underline">{{ image.username }}</span>
                             {% endif %}
-                            {% endblock %}
-                        </div>
+                        {% endblock %}
                     </div>
 
-                    <!-- Like button and text row inside image column: -->
-                    <div class="row my-2">
-                        <div id="likeBtn{{ image.id }}" class="col-1 black_and_white">
-
-                            <form id="like_button_form" method="POST" action="{% url 'like_image' %}">
-                                {% csrf_token %}
-
-                                <input type="hidden" id="like_image_input" name="image_id" value="{{ image.id }}">
-
-                                <input type="submit" id="like_btn"
-                                    class="btn btn-link lead text-decoration-none shadow-none" onclick="like('likeBtn{{ image.id }}')" value="👍" />
-
-                            </form>
+                    <!--* image column: -->
+                    <div class="col-6 my-1">
+                        <div class="row">
+                            <div id="image-col" class="col">
+                                {% block image_block %}
+                                {% if image %}
+                                    {% if image.url %}
+                                        <img draggable="false" class="img-fluid d-block w-100" src="{{ image.url }}">
+                                    {% elif image.file %}
+                                        <img draggable="false" class="img-fluid d-block w-100" src="{{MEDIA_URL}}{{ image.file }}">
+                                    {% endif %}
+                                {% endif %}
+                                {% endblock %}
+                            </div>
                         </div>
 
-                        <!--* number of likes and likers: -->
-                        <div class="col-6 w-auto mx-md-2">
-                            <strong>
+                        <!-- Like button and text row inside image column: -->
+                        <div class="row my-2">
+                            <div id="likeBtn{{ image.id }}" class="col-1 black_and_white">
 
-                                {% if image.liker_usernames|length == 0 %}
-                                    {{ image.num_likes }} Likes
+                                <form id="like_button_form" method="POST" action="{% url 'like_image' %}">
+                                    {% csrf_token %}
 
-                                {% elif image.liker_usernames|length == 1 %}
-                                    {{ image.num_likes }} Like by {{ image.liker_usernames.0 }}.
+                                    <input type="hidden" id="like_image_input" name="image_id" value="{{ image.id }}">
 
-                                {% elif image.liker_usernames|length == 2 %}
-                                    {{ image.num_likes }} Like by {{ image.liker_usernames.0 }} and {{ image.liker_usernames.1 }}.
+                                    <input type="submit" id="like_btn"
+                                        class="btn btn-link lead text-decoration-none shadow-none" onclick="like('likeBtn{{ image.id }}')" value="👍" />
 
-                                {% elif image.liker_usernames|length < 4 %} {{ image.num_likes }} Like by 
-                                {{ image.liker_usernames.0 }}, {{ image.liker_usernames.1 }} and {{ image.liker_usernames.2 }}.
-                                    
-                                {% else %}
-                                    {{ image.num_likes }} Likes by <!-- only 3 usernames to be shown: -->
-                                    {% for liker in image.liker_usernames|slice:":2" %}
-                                    {{ liker }},
-                                    {% endfor %}
-                                    {{ image.liker_usernames.2 }}
+                                </form>
+                            </div>
 
-                                    and others.
-                                    {% endif%}
+                            <!--* number of likes and likers: -->
+                            <div class="col-6 w-auto mx-md-2">
+                                <strong>
 
-                            </strong>
+                                    {% if image.liker_usernames|length == 0 %}
+                                        {{ image.num_likes }} Likes
 
+                                    {% elif image.liker_usernames|length == 1 %}
+                                        {{ image.num_likes }} Like by {{ image.liker_usernames.0 }}.
+
+                                    {% elif image.liker_usernames|length == 2 %}
+                                        {{ image.num_likes }} Like by {{ image.liker_usernames.0 }} and {{ image.liker_usernames.1 }}.
+
+                                    {% elif image.liker_usernames|length < 4 %} {{ image.num_likes }} Like by 
+                                    {{ image.liker_usernames.0 }}, {{ image.liker_usernames.1 }} and {{ image.liker_usernames.2 }}.
+                                        
+                                    {% else %}
+                                        {{ image.num_likes }} Likes by <!-- only 3 usernames to be shown: -->
+                                        {% for liker in image.liker_usernames|slice:":2" %}
+                                        {{ liker }},
+                                        {% endfor %}
+                                        {{ image.liker_usernames.2 }}
+
+                                        and others.
+                                        {% endif%}
+
+                                </strong>
+
+                            </div>
                         </div>
                     </div>
+                    
                 </div>
 
-            </div>
-            <!-- spacer: -->
-            <div class="row my-2"></div>
+                <!-- spacer: -->
+                <div class="row my-2"></div>
+                {% endfor %}
+                
+            {% else %}
+                <div class="row my-5">
+                    <div class="col">
+                        <h3 class="text-center">No images uploaded yet.</h3>
+                    </div>
+                </div>
+            {% endif %}
         
-            {% endfor %}
         </div>
     </div>
 

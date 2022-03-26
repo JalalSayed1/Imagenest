@@ -169,8 +169,13 @@ def add_picture(request):
             image_url = upload_form.cleaned_data.get("image_url")
             image_file = upload_form.cleaned_data.get("image_file")
             
+            # if user specified both url and file:
             if (len(image_url) > 0) and (image_file is not None):
                 context['error_message'] = "Please specify only one way to upload an image."
+                
+            # if user entered invlaid image url:
+            elif (len(image_url) > 0) and (not image_url.endswith(("jpeg", "jpg", "gif", "png", "apng", "svg", "bmp", "webp"))):
+                context['error_message'] = "The url is not an image. It must end with jpeg, jpg, gif, png, apng, svg, bmp, or webp."
                 
             elif (len(image_url) > 0) or (image_file is not None):
                 uploaded_image = Image.objects.create(username=uploader, url=image_url, file=image_file)
@@ -178,7 +183,7 @@ def add_picture(request):
                 return redirect(home)
             
             else:
-                context['error_message'] = "Please enter a valid URL or upload a file then try again."
+                context['error_message'] = "Please enter a URL or upload a file then try again."
 
     return render(request, "imagenest/upload.html", context)
 
