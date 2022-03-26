@@ -1,6 +1,5 @@
 
 
-from pprint import PrettyPrinter
 from django.urls import reverse, resolve
 from imagenest.views import home
 from imagenest.models import Image, User
@@ -75,6 +74,20 @@ class HomeViewTests(TestCase):
         self.assertContains(response, "test_image_1.jpg")
         self.assertContains(response, "test_image_2.jpg")
         self.assertContains(response, user.username)
+        
+    def test_home_view_order_of_multiple_images(self):
+        user = User.objects.all()[0]
+        add_image_by_file(
+            user, "./imagenest_project/imagenest/tests/test_images/test_image_1.jpg")
+        add_image_by_file(
+            user, "./imagenest_project/imagenest/tests/test_images/test_image_2.jpg")
+        response = self.client.get(self.home_url)
+        
+        image2 = response.content.decode().find("test_image_2.jpg")
+        image1 = response.content.decode().find("test_image_1.jpg")
+        
+        # image 2 should be first:
+        self.assertTrue(image2 < image1)
 
 # helper funcs:
 def add_image_by_url(uploader, image_url):
