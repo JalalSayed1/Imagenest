@@ -57,7 +57,7 @@ ImageNest -
             <div class="row">
                 <div class="col">
                     <!-- if profile image exists, will be placed here: -->
-                    {% block profile_image %}
+                    {% block profile_image_and_username %}
                     {% endblock %}
                 </div>
             </div>
@@ -68,7 +68,7 @@ ImageNest -
                 <div class="row w-100">
                     <!--* username column: -->
                     <div class="col-3 text-end lead">
-                        {% block col1_block %}
+                        {% block image_usernames_col %}
                             {% if image %}
                                 By @<span class="underline">{{ image.username }}</span>
                             {% endif %}

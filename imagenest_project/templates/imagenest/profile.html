@@ -13,34 +13,36 @@ Profile
 {% block activate_profile_tab %}active{% endblock %}
 {% block activate_top_images_tab %}{% endblock %}
 
-{% block profile_image %}
+{% block profile_image_and_username %}
 
 <div class="col py-5 d-flex justify-content-center text-center">
 
-    {% if profile_image %}
-
-
-
+    
     <div class="row d-flex justify-content-center text-center">
+
+        {% if profile_image %}
         <div class="col-6 mx-5 d-flex justify-content-center">
             <div class="circle-img img-circle">
                 <!-- profile image must be a square: -->
                 <img class="img-fluid" src="{{ profile_image.url }}" >
             </div>
         </div>
-        <div class="h2 w-100 col-3 m-5 text-center">
+        {% endif %}
+
+        <div class="w-100 col-3 m-5 text-start">
 			{% if profile %}
-				{{ profile.username }}
+            <h1>
+				Profile of @<span class="underline">{{ profile.username }}</span>:
+            </h1>
 			{% else %}	
 				{{ error }}
 			{% endif %}
         </div>
     </div>
-	{% endif %}
 
 </div>
 
 {% endblock %}
 
-{% block col1_block %}
+{% block image_usernames_col %}
 {% endblock %}

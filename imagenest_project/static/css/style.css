@@ -41,7 +41,7 @@
   color: whitesmoke;
 }
 
-.container::before {
+.container::before, .custom-bg::before {
   content: "";
   position: absolute;
   top: 0;
@@ -50,6 +50,7 @@
   height: 100%;
   background: url("../images/bg2.svg");
   opacity: 0.02;
+  z-index: -1;
 }
 
 .form-control:focus, .form-control:hover, .form-control:active:hover, .form-control:active:focus {
@@ -83,8 +84,9 @@
   transition: 500ms;
 }
 
-.underline {
+.underline, .redirect-link:hover {
   text-decoration: underline var(--main-color);
+  transition: 200ms;
 }
 
 .navbar-nav a {
@@ -106,6 +108,5 @@
 
 #logo-text:hover {
   text-shadow: var(--main-color) 3px 12px;
-  /* box-shadow: 3px -6px 82px 8px rgba(0, 0, 0, 0.71); */
   transition: all 500ms linear;
 }

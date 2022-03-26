@@ -21,11 +21,10 @@
 
 <!--* Submit button and message: -->
 {% block primary_btn_block %}
-<button class="btn btn-primary" type="submit">Login</button>
+<button class="btn btn-dark" type="submit">Login</button>
 <!-- <input type="submit" value="Login" class="btn btn-primary"> -->
 {% endblock %}
 
 {% block redirect_message_block %}
-<p class="text-light">Do not have an account? <a href="{% url 'register' %}" class="text-light" role="button"
-                aria-disabled="true">Register</a></p>
+<p class="text-black">Do not have an account? <a href="{% url 'register' %}" class="text-black redirect-link" role="button" aria-disabled="true">Register</a></p>
 {% endblock %}

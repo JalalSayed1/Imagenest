@@ -13,37 +13,49 @@ Welcome to ImageNest
 {% endblock %}
 
 {% block body_block %}
-<div class="row vh-100" style="background: rgb(2,0,36); background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%,
-rgba(0,212,255,1) 100%); backdrop-filter: blur(4px);">
+<div class="row vh-100 custom-bg">
 
-    <div class="col align-self-center">
+    <div class="row">
+        <div class="col align-self-center">
 
-        <form id='register_and_login_form' method='POST'>
-            {% csrf_token %}
-            <!-- vertically stacked layout: -->
-            <div class="vstack gap-2 col-md-5 mx-auto text-light text-decoration-none">
+            <form id='register_and_login_form' method='POST'>
+                {% csrf_token %}
+                <!-- vertically stacked layout: -->
+                <div class="vstack gap-2 col-md-5 mx-auto text-decoration-none text-danger">
 
-                {% block form_block %}
-                {% endblock %}
+                    {% if success %}
+                        <p class="alert alert-success">{{ success }}</p>
+                    {% endif %}
 
-                <!-- horizontally stacked: -->
-                <div class="hstack gap-3">
-                    <div class="row">
-                        <div class="col-auto">
-                            {% block primary_btn_block %}
-                            {% endblock %}
+                    {% block form_block %}
+                    {% endblock %}
+
+                    <!-- horizontally stacked: -->
+                    <div class="hstack gap-3">
+                        <div class="row">
+                            <div class="col-auto">
+                                {% block primary_btn_block %}
+                                {% endblock %}
+                            </div>
+                            <div class="col-auto my-2">
+                                {% block redirect_message_block %}
+                                {% endblock %}
+                            </div>
+
                         </div>
-                        <div class="col-auto my-2">
-                            {% block redirect_message_block %}
-                            {% endblock %}
-                        </div>
-
                     </div>
+
+            </form>
+
+            <div class="row my-2">
+                <div class="col text-danger">
+                    {% if error %}
+                        {{ error }}
+                    {% endif %}
                 </div>
+            </div>
 
-
-        </form>
-
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -12,15 +12,15 @@ from django.views import View
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import (require_GET, require_http_methods, require_POST, require_safe)
 from django.http import HttpResponseRedirect
-
 from imagenest import views
-
 from .forms import ImageUploadForm, LoginForm, RegisterForm, SearchForm
 from .models import Image, Like, Submission
 
 
 @csrf_protect
 def login(request):
+    login_form = LoginForm()
+    context = {"login_form": login_form}
     
     if request.method == "POST":
         login_form = LoginForm(request.POST)
@@ -29,49 +29,59 @@ def login(request):
             username = request.POST.get('username')
             password = request.POST.get('password')
             user = auth.authenticate(request, username=username, password=password)
-            
+            print(user)
             if user is not None:
                 if user.is_active:
                     auth.login(request, user)
                     return redirect(home)
             else:
-                # todo: add error message
-                print('invalid login details')
-                return render(request, "imagenest/login.html", {"login_form": login_form, "error": f"Invalid login details: {username}, {password}"})
+                context['error'] = f"Username and Password do not match."
             
         else:
-            # todo: add error message
-            print('invalid info') 
-            print(login_form.errors)
+            context['error'] = f"Username and password must be at least 6 characters long."
+
                 
-    
-    login_form = LoginForm()
-    return render(request, "imagenest/login.html", {"login_form": login_form})
+    return render(request, "imagenest/login.html", context)
 
 
 def register(request):
-    # to tell the template whether the registration was successful:
-    # registered = False
+
+    register_form = RegisterForm()
+    context = {"register_form": register_form}
 
     if request.method == 'POST':
         register_form = RegisterForm(request.POST)
 
         if register_form.is_valid():
-            user = register_form.save(commit=False)
+            firstname = request.POST.get('firstname')
+            surname =  request.POST.get('surname')
+            username = request.POST.get('username')
             password = request.POST.get('password')
-            user.set_password(password)
-            user.save()
+            confirm_password = request.POST.get('confirm_password')
             
-            return redirect(login)
+            if (len(username) < 6) or (len(password) < 6):
+                context['error'] = f"Username and password must be at least 6 characters long."
+            
+            # else if username does not contain any alphabetical characters:
+            elif not any(char.isalpha() for char in username):
+                context['error'] = f"Username must contain at least one alphabetical character."
+            
+            elif password != confirm_password:
+                context['error'] = f"Passwords do not match."
+                
+            elif not firstname.isalpha() and not surname.isalpha():
+                context['error'] = f"Firstname and Surname must contain only alphabetical characters."
+            
+            else:
+                user = register_form.save(commit=False)
+                user.set_password(password)
+                user.save()
+                return redirect(login)
         else:
-            # todo: add error message
-            print('invalid info')
-            return render(request, "imagenest/register.html", {"register_form": register_form})
+            context["error"] = "Username already exists. Please login or choose another username."
+            return render(request, "imagenest/register.html", context)
 
-    
-    register_form = RegisterForm()
-    # "registered": registered
-    return render(request, "imagenest/register.html", {"register_form": register_form})
+    return render(request, "imagenest/register.html", context)
 
 
 def logout(request):
@@ -90,12 +100,10 @@ def profile(request, user):
         profile = None
         images = None
         error = "Error: User does not exist"
-    profile_image = {"url":"https://source.unsplash.com/250x250?person", "username" :"username1", 'id' : 8}
 
     context_dict = {
         "images" : images,
         "profile" : profile,
-        "profile_image" : profile_image,
         "error" : error,
         }
     return render(request, "imagenest/profile.html", context_dict)
