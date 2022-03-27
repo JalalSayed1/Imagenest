@@ -17,3 +17,15 @@ class SearchTests(TestCase):
     def test_search_uses_template(self):
         response = self.client.get(reverse('imagenest:search'))
         self.assertTemplateUsed(response, 'imagenest/search.html', "The search.html template is not used for the search() view}")
+        
+class uploadTests(TestCase):
+    def test_upload_form_exists(self):
+        import imagenest.forms
+        self.assertTrue('ImageUploadForm' in dir(imagenest.forms), "The ImageUploadForm class could not be found in forms.py")
+        
+    def test_upload_uses_template(self):
+        response = self.client.get(reverse('imagenest:upload'))
+        self.assertTemplateUsed(response, 'imagenest/upload.html', "The upload.html template is not used for the add_picture() view}")
+        
+    def test_upload(self):
+        #how to test that a file/url has been uploaded?
