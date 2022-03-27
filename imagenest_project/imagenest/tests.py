@@ -6,10 +6,6 @@ from imagenest.models import UserProfile, Image, Like, User
 
 class SearchTests(TestCase):
 
-    def test_search_form_exists(self):
-        import imagenest.forms
-        self.assertTrue('SearchForm' in dir(imagenest.forms), "The SearchForm class could not be found in forms.py")
-
     def test_search_form_linked_to_User(self):
         search_form = SearchForm()
         self.assertEqual(type(search_form.__dict__['instance']), User, "The search form is not correctly linked to the User model.")
@@ -19,13 +15,38 @@ class SearchTests(TestCase):
         self.assertTemplateUsed(response, 'imagenest/search.html', "The search.html template is not used for the search() view}")
         
 class uploadTests(TestCase):
-    def test_upload_form_exists(self):
-        import imagenest.forms
-        self.assertTrue('ImageUploadForm' in dir(imagenest.forms), "The ImageUploadForm class could not be found in forms.py")
-        
+    
     def test_upload_uses_template(self):
         response = self.client.get(reverse('imagenest:upload'))
         self.assertTemplateUsed(response, 'imagenest/upload.html', "The upload.html template is not used for the add_picture() view}")
         
     def test_upload(self):
         #how to test that a file/url has been uploaded?
+        
+class registerTests(TestCase):
+    
+    def test_register_uses_template(self):
+        response = self.client.get(reverse('imagenest:register'))
+        self.assertTemplateUsed(response, 'imagenest/register.html', "The register.html template is not used for the register() view}")
+
+class formsTests(TestCase):
+    #LoginForm
+    def test_login_form_exists(self):
+        import imagenest.forms
+        self.assertTrue('LoginForm' in dir(imagenest.forms), "The LoginForm class could not be found in forms.py")
+
+    #RegisterForm
+    def test_register_form_exists(self):
+        import imagenest.forms
+        self.assertTrue('RegisterForm' in dir(imagenest.forms), "The RegisterForm class could not be found in forms.py")
+    
+    #ImageUploadForm
+    def test_upload_form_exists(self):
+        import imagenest.forms
+        self.assertTrue('ImageUploadForm' in dir(imagenest.forms), "The ImageUploadForm class could not be found in forms.py")
+    
+    #SearchForm
+    def test_search_form_exists(self):
+        import imagenest.forms
+        self.assertTrue('SearchForm' in dir(imagenest.forms), "The SearchForm class could not be found in forms.py")
+    
