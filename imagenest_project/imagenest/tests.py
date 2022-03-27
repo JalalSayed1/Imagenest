@@ -14,12 +14,6 @@ class uploadTests(TestCase):
     
     def test_upload(self):
         #how to test that a file/url has been uploaded?
-        
-class registerTests(TestCase):
-    
-    def test_register_uses_template(self):
-        response = self.client.get(reverse('imagenest:register'))
-        self.assertTemplateUsed(response, 'imagenest/register.html', "The register.html template is not used for the register() view}")
 
 class formsTests(TestCase):
     #LoginForm
