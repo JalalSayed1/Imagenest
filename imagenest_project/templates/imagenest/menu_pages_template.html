@@ -99,7 +99,6 @@ ImageNest -
                                     {% csrf_token %}
 
                                     <input type="hidden" id="like_image_input" name="image_id" value="{{ image.id }}">
-
                                     <input type="submit" id="like_btn"
                                         class="btn btn-link lead text-decoration-none shadow-none" onclick="like('likeBtn{{ image.id }}')" value="👍" />
 
@@ -107,8 +106,8 @@ ImageNest -
                             </div>
 
                             <!--* number of likes and likers: -->
-                            <div class="col-6 w-auto mx-md-2">
-                                <strong>
+                            <div class="col-6 w-75 mx-md-2">
+                                <strong class="w-100 ms-1">
 
                                     {% if image.liker_usernames|length == 0 %}
                                         {{ image.num_likes }} Likes
@@ -119,29 +118,34 @@ ImageNest -
                                     {% elif image.liker_usernames|length == 2 %}
                                         {{ image.num_likes }} Like by {{ image.liker_usernames.0 }} and {{ image.liker_usernames.1 }}.
 
-                                    {% elif image.liker_usernames|length < 4 %} {{ image.num_likes }} Like by 
-                                    {{ image.liker_usernames.0 }}, {{ image.liker_usernames.1 }} and {{ image.liker_usernames.2 }}.
+                                    {% elif image.liker_usernames|length < 4 %} 
+                                        {{ image.num_likes }} Likes by 
+                                        {{ image.liker_usernames.0 }}, {{ image.liker_usernames.1 }} and {{ image.liker_usernames.2 }}.
                                         
                                     {% else %}
-                                        {{ image.num_likes }} Likes by <!-- only 3 usernames to be shown: -->
+                                        <!-- only 3 usernames to be shown: -->
+                                        {{ image.num_likes }} Likes by
                                         {% for liker in image.liker_usernames|slice:":2" %}
-                                        {{ liker }},
+                                            {{ liker }},
                                         {% endfor %}
+                                        
                                         {{ image.liker_usernames.2 }}
-
                                         and others.
                                         {% endif%}
 
                                 </strong>
-
+                                <div class="row my-1 ms-1">
+                                    {{ image.caption }}
+                                </div>
                             </div>
                         </div>
+
                     </div>
                     
                 </div>
 
                 <!-- spacer: -->
-                <div class="row my-2"></div>
+                <div class="row my-4"></div>
                 {% endfor %}
                 
             {% else %}

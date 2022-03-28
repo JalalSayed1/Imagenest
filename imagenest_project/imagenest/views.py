@@ -160,11 +160,10 @@ def suggest_users(username_input):
     return list(similar_users) # return the set as a list
 
 @login_required
-def add_picture(request):    
+def add_picture(request):
     uploader = request.user
     upload_form = ImageUploadForm()
-    caption = ImageUploadForm()
-    context = {'upload_form' : upload_form, "uploader" : uploader, "caption" : caption}
+    context = {'upload_form' : upload_form, "uploader" : uploader}
 
     if request.method == "POST":
         upload_form = ImageUploadForm(request.POST, request.FILES)
@@ -172,7 +171,7 @@ def add_picture(request):
             upload_form.save(commit=False)
             image_url = upload_form.cleaned_data.get("image_url")
             image_file = upload_form.cleaned_data.get("image_file")
-            user_caption = upload_form.cleaned_data.get("user_caption")
+            image_caption = upload_form.cleaned_data.get("image_caption")
             
             # if user specified both url and file:
             if (len(image_url) > 0) and (image_file is not None):
@@ -183,7 +182,7 @@ def add_picture(request):
                 context['error_message'] = "The url is not an image. It must end with jpeg, jpg, gif, png, apng, svg, bmp, or webp."
                 
             elif (len(image_url) > 0) or (image_file is not None):
-                uploaded_image = Image.objects.create(username=uploader, url=image_url, file=image_file)
+                uploaded_image = Image.objects.create(username=uploader, url=image_url, file=image_file, caption=image_caption)
                 uploaded_image.save()
                 return redirect(home)
             
