@@ -32,7 +32,7 @@ class Image(models.Model):
     creation_time = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return str(self.username)
+        return f"{self.username}'s image"
     
     @property
     def num_likes(self):
@@ -41,29 +41,14 @@ class Image(models.Model):
     @property
     def liker_usernames(self):
         return [username for username in self.likers.all()]
-
-    @property
-    def add_like(self):
-        self.likes += 1
-
-    @property
-    def sub_like(self):
-        self.likes -= 1
     
-
-
-# Like choices to toggle between like and unlike an image:
-LIKE_CHOICES = (('Like', 'Like'), ('Unlike', 'Unlike'),)
 # Like model for every image in the app except the profile image:
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ForeignKey(Image, on_delete=models.CASCADE)
-    # value is to like or unlike image:
-    value = models.CharField(choices=LIKE_CHOICES,
-                             default='Like', max_length=10)
 
     def __str__(self):
-        return f"{self.image}"
+        return f"{self.image}'s like"
         
 #upload class
 class Submission(models.Model):

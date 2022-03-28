@@ -211,28 +211,17 @@ def home(request):
 
 def like_image(request):
     user = request.user
+    
     if request.method == 'POST':
         image_id = request.POST.get('image_id')
-        image_obj = Image.objects.get(id=image_id)
+        image_obj = Image.objects.get(id = image_id)
         
         # add/remove user from likers list: 
         if user in image_obj.likers.all():
             image_obj.likers.remove(user)
-            image_obj.sub_like
-
         else:
             image_obj.likers.add(user)
-            image_obj.add_like
 
-        # increment/decrement num of likes of this image:
-        like, created = Like.objects.get_or_create(user=user, image_id=image_id)
-        if not created:
-            if like.value == 'Like':
-                like.value = 'Unlike'
-            else:
-                like.value = 'Like'
-
-        # like.save()
         image_obj.save()
     
     # redirect to the prev page:
