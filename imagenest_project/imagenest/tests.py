@@ -114,3 +114,30 @@ class RegisterTests(TestCase):
                    'password': '1'}
         response = self.client.post(reverse(register), request)
         self.assertTemplateUsed(response, 'imagenest/register.html', "The register() view does not return the original form on error")
+
+
+class LoginTests(TestCase):
+
+    def setUp(self):
+        # Login requires an associated User, so we actually register one using RegisterTests
+        RegisterTests.test_register_success(self)
+
+    def test_login_form_exists(self):
+        import imagenest.forms
+        self.assertTrue('LoginForm' in dir(imagenest.forms), "The LoginForm class could not be found in forms.py")
+
+    def test_login_uses_template(self):
+        response = self.client.get(reverse(login))
+        self.assertTemplateUsed(response, 'imagenest/login.html', "The login.html template is not used for the login() view")
+
+    def test_login_success(self):
+        request = {'username': TEST_USER['username'],
+                   'password': TEST_USER['password']}
+        response = self.client.post(reverse(login), request)
+        self.assertRedirects(response, reverse(home))
+
+    def test_login_error(self):
+        request = {'username': TEST_USER['username'],
+                   'password': ''}
+        response = self.client.post(reverse(login), request)
+        self.assertTemplateUsed(response, 'imagenest/login.html', "The login() view does not return the original form on error")
