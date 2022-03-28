@@ -110,7 +110,7 @@ def profile(request, user):
 def top_images(request):
     #order_by seems to work now, there was a discrepency with likes and likers which
     #is now fixed
-    images = Image.objects.all().order_by("-likes")[:10]
+    images = sorted(Image.objects.all()[:10], key=lambda image: image.num_likes, reverse=True)
 
     context = {'images' : images,}
 

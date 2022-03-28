@@ -84,7 +84,7 @@ class RegisterForm(forms.ModelForm):
 class ImageUploadForm(forms.ModelForm):
     image_url = forms.URLField(widget=forms.TextInput(attrs={"placeholder": "Image URL"}), required=False)
     image_file = forms.ImageField(required=False)
-    image_caption = forms.CharField(widget=forms.Textarea(attrs={"placeholder": "Caption"}))
+    image_caption = forms.CharField(widget=forms.Textarea(attrs={"placeholder": "Caption", "maxlength": "200"}))
 
     # add a class to each visible field in this form (styling): 
     def __init__(self, *args, **kwargs):
