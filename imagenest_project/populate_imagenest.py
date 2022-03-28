@@ -41,35 +41,43 @@ def populate():
         {'url':'https://images.unsplash.com/photo-1624965085151-0710f6b3f284',
          'likes':3,
          'username':'john1',
-         'likers': ['ksmith', 'na1mi2', 'jdjd']},
+         'likers': ['ksmith', 'na1mi2', 'jdjd'],
+         'caption': 'test'},
         {'url':'https://images.unsplash.com/photo-1572091574819-ea8bb5394b1d',
          'likes':1,
          'username':'john1',
-         'likers': ['jdjd']},
+         'likers': ['jdjd'],
+         'caption': 'test'},
         {'url':'https://images.unsplash.com/photo-1640622660721-45b83554ab05',
          'likes':0,
          'username':'ksmith',
-         'likers': []},
+         'likers': [],
+         'caption': 'test'},
         {'url':'https://images.unsplash.com/photo-1647471641611-908659d7b366',
          'likes':5,
          'username':'ksmith',
-         'likers': ['john1','liow123','jdjd','this_is_hu','na1mi2']},
+         'likers': ['john1','liow123','jdjd','this_is_hu','na1mi2'],
+         'caption': 'test'},
         {'url':'https://images.unsplash.com/photo-1647514422086-18cde746fa26',
          'likes':2,
          'username':'john1',
-         'likers': ['jdjd','this_is_hu']},
+         'likers': ['jdjd','this_is_hu'],
+         'caption': 'test'},
         {'url':'https://images.unsplash.com/photo-1647363542902-9b76666d88b3',
          'likes':3,
          'username':'this_is_hu',
-         'likers': ['jdjd','this_is_hu', 'liow123']},
+         'likers': ['jdjd','this_is_hu', 'liow123'],
+         'caption': 'test'},
         {'url':'https://images.unsplash.com/photo-1647482290110-df9a2895cb95',
          'likes':4,
          'username':'ksmith',
-         'likers': ['na1mi2','this_is_hu', 'liow123', 'jdjd']},
+         'likers': ['na1mi2','this_is_hu', 'liow123', 'jdjd'],
+         'caption': 'test'},
         {'url':'https://images.unsplash.com/photo-1640622299541-8c8ab8a098f3',
          'likes':1,
          'username':'liow123',
-         'likers': ['this_is_hu']}
+         'likers': ['this_is_hu'],
+         'caption': 'test'}
         ]
 
     # add each user to database
@@ -78,12 +86,13 @@ def populate():
 
     # add each image to database
     for image in images:
-        add_image(image['url'], image['likes'], image['username'], image['likers'])
+        add_image(image['url'], image['likes'], image['username'], image['likers'], caption['caption'])
 
     # prints the image details being added to the database
     for user in User.objects.all():
         for image in user.owner.all():
             print(f'- {user.username}: {image.url}; likers: {image.liker_usernames}')
+    
 
 
 def add_user_and_profile(firstname, surname, username, password):
@@ -116,7 +125,7 @@ def add_user_and_profile(firstname, surname, username, password):
     return user
 
 
-def add_image(url, likes, username, likers):
+def add_image(url, likes, username, likers, caption):
     user = User.objects.get(username=username) # find associated User object
 
     try:
@@ -129,6 +138,7 @@ def add_image(url, likes, username, likers):
     # set the image attributes
     image.url = url
     image.likes = likes
+    image.caption = caption
 
     # set the users who liked the image and the likes
     for liker in likers:
@@ -144,3 +154,4 @@ def add_image(url, likes, username, likers):
 if __name__ == '__main__':
     print('Starting Imagenest population script...')
     populate()
+

@@ -39,12 +39,10 @@ def login(request):
         else:
             context['error'] = f"Username and password must be at least 6 characters long."
 
-                
     return render(request, "imagenest/login.html", context)
 
 
 def register(request):
-
     register_form = RegisterForm()
     context = {"register_form": register_form}
 
@@ -144,7 +142,6 @@ def search(request):
 
     return render(request, "imagenest/search.html", context_dict)
 
-
 def suggest_users(username_input):
     #suggests users for the search based on the usernames in the database
     similar_users = set()
@@ -163,11 +160,11 @@ def suggest_users(username_input):
     return list(similar_users) # return the set as a list
 
 @login_required
-def add_picture(request):
-    
+def add_picture(request):    
     uploader = request.user
     upload_form = ImageUploadForm()
-    context = {'upload_form' : upload_form, "uploader" : uploader}
+    caption = ImageUploadForm()
+    context = {'upload_form' : upload_form, "uploader" : uploader, "caption" : caption}
 
     if request.method == "POST":
         upload_form = ImageUploadForm(request.POST, request.FILES)
@@ -175,6 +172,7 @@ def add_picture(request):
             upload_form.save(commit=False)
             image_url = upload_form.cleaned_data.get("image_url")
             image_file = upload_form.cleaned_data.get("image_file")
+            user_caption = upload_form.cleaned_data.get("user_caption")
             
             # if user specified both url and file:
             if (len(image_url) > 0) and (image_file is not None):
@@ -196,8 +194,7 @@ def add_picture(request):
 
 
 @login_required
-def home(request):
-    
+def home(request):    
     images = Image.objects.all().order_by("-creation_time")
     user = request.user
 
@@ -208,7 +205,7 @@ def home(request):
     return render(request, "imagenest/home.html", context)
     
 
-
+@login_required
 def like_image(request):
     user = request.user
     
