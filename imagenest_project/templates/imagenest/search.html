@@ -45,7 +45,7 @@ Search
                         Did you mean: </br>
                         <ul class="list-group">
                         {% for user in results %}
-                            <a href="{% url 'profile' results %}" class="list-group-item list-group-item-action">{{ user }}</a>
+                            <a href="{% url 'profile' user %}" class="list-group-item list-group-item-action">{{ user }}</a>
                         {% endfor %}
                         </ul>
                     {% endif %}
