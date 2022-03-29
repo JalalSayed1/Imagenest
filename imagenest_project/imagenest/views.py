@@ -7,6 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
+from django.contrib.auth import password_validation
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_protect
@@ -20,7 +21,7 @@ from .models import Image, Like, Submission
 @csrf_protect
 def login(request):
     login_form = LoginForm()
-    context = {"login_form": login_form}
+    context_dict = {"login_form": login_form}
     
     if request.method == "POST":
         login_form = LoginForm(request.POST)
@@ -28,26 +29,40 @@ def login(request):
         if login_form.is_valid():
             username = request.POST.get('username')
             password = request.POST.get('password')
-            user = auth.authenticate(request, username=username, password=password)
-            if user is not None:
-                if user.is_active:
-                    auth.login(request, user)
-                    return redirect(home)
-            else:
-                context['error'] = f"Username and Password do not match."
-            
-        else:
-            context['error'] = f"Username and password must be at least 6 characters long."
 
-    return render(request, "imagenest/login.html", context)
+            if User.objects.filter(username=username).exists(): # if username is registered
+
+                user = auth.authenticate(request, username=username, password=password)
+                if user: # if user is successfully authenticated
+
+                    if user.is_active:
+                        auth.login(request, user)
+                        return redirect(home)
+                    else:
+                        context_dict['error'] = "The account is inactive. Please try a different one." 
+
+                else: # otherwise if password does not match username 
+                    context_dict['error'] = "Password is incorrect. Please try again."
+            
+            else: # otherwise if username is not recognised
+                context_dict['error'] = "Username not recognised. Please try again."
+            
+
+    return render(request, "imagenest/login.html", context_dict)
 
 
 def register(request):
     register_form = RegisterForm()
-    context = {"register_form": register_form}
+    context_dict = {"register_form": register_form}
 
     if request.method == 'POST':
         register_form = RegisterForm(request.POST)
+
+        firstname = request.POST.get('firstname')
+        surname =  request.POST.get('surname')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
 
         if register_form.is_valid():
             firstname = request.POST.get('firstname')
@@ -55,30 +70,55 @@ def register(request):
             username = request.POST.get('username')
             password = request.POST.get('password')
             confirm_password = request.POST.get('confirm_password')
-            
-            if (len(username) < 6) or (len(password) < 6):
-                context['error'] = f"Username and password must be at least 6 characters long."
-            
-            # else if username does not contain any alphabetical characters:
-            elif not any(char.isalpha() for char in username):
-                context['error'] = f"Username must contain at least one alphabetical character."
-            
-            elif password != confirm_password:
-                context['error'] = f"Passwords do not match."
-                
-            elif not firstname.isalpha() and not surname.isalpha():
-                context['error'] = f"Firstname and Surname must contain only alphabetical characters."
+
+            registration_error = validate_registration(firstname, surname, username, password, confirm_password)
+            if registration_error:
+                context_dict["error"] = registration_error
             
             else:
                 user = register_form.save(commit=False)
                 user.set_password(password)
                 user.save()
                 return redirect(login)
-        else:
-            context["error"] = "Username already exists. Please login or choose another username."
-            return render(request, "imagenest/register.html", context)
 
-    return render(request, "imagenest/register.html", context)
+            return render(request, "imagenest/register.html", context_dict)
+        
+        else:
+            error = list(register_form.errors.values())[0][0]
+            if error == "Enter a valid username. This value may contain only letters, numbers, and @/./+/-/_ characters.":
+                error = "Username may contain only alphabetical characters, numbers, and @/./+/-/_ characters. Please try again."
+            context_dict["error"] = error
+
+
+    return render(request, "imagenest/register.html", context_dict)
+
+
+def validate_registration(firstname, surname, username, password, confirm_password):
+
+    ## check firstname and username contain only letters
+    print(firstname, surname)
+    if not firstname.isalpha():
+        return "Firstname must contain only alphabetical characters."
+    elif not surname.isalpha():
+        return "Surname must contain only alphabetical characters."
+
+    # check username does not contain a space, does contain a letter, and is longer than 6 characters
+    elif User.objects.filter(username=username).exists():
+        return "Username already registered. Please try again."
+    elif len(username) < 6:
+        return "Username must be at least 6 characters long. Please try again."
+    elif not any(char.isalpha() for char in username):
+        return "Username must contain at least one alphabetical characters. Please try again."
+
+
+    ## check two passwords match, and the password is strong
+    if password != confirm_password:
+        return "Passwords do not match. Please try again."
+    try:
+        # test password against django's password validators
+        password_validation.validate_password(password)
+    except Exception as exception: # if a validator throws a ValidationError
+        return list(exception)[0] # return the exception
 
 
 def logout(request):
@@ -116,6 +156,7 @@ def top_images(request):
 
     return render(request, "imagenest/top_images.html",  context)
 
+
 @login_required
 def search(request):
     # set up the context_dict with default values
@@ -142,6 +183,7 @@ def search(request):
 
     return render(request, "imagenest/search.html", context_dict)
 
+
 def suggest_users(username_input):
     #suggests users for the search based on the usernames in the database
     similar_users = set()
@@ -160,6 +202,7 @@ def suggest_users(username_input):
             similar_users = similar_users.union(new_similar_users)
 
     return list(similar_users)[::-1] # return the set as a list in reverse order
+
 
 def find_similar_users(username):
     similar_users = set() # use set to avoid duplicated data
