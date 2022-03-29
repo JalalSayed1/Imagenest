@@ -56,7 +56,6 @@ class StructureAndSetupTests(TestCase):
     def test_templates_directory(self):
        base_template_exists = os.path.isfile(os.path.join(self.imagenest_templates_dir, 'base.html'))
        first_page_template_exists = os.path.isfile(os.path.join(self.imagenest_templates_dir, 'first_page.html'))
-       get_profile_template_exists = os.path.isfile(os.path.join(self.imagenest_templates_dir, 'get_profile.html'))
        profile_template_exists = os.path.isfile(os.path.join(self.imagenest_templates_dir, 'profile.html'))
        home_template_exists = os.path.isfile(os.path.join(self.imagenest_templates_dir, 'home.html'))
        login_template_exists = os.path.isfile(os.path.join(self.imagenest_templates_dir, 'login.html'))
@@ -69,7 +68,6 @@ class StructureAndSetupTests(TestCase):
 
        self.assertTrue(base_template_exists, "The base.html template is missing from the templates directory.")
        self.assertTrue(first_page_template_exists, "The first_page.html template is missing from the templates directory.")
-       self.assertTrue(get_profile_template_exists, "The get_profile.html template is missing from the templates directory.")
        self.assertTrue(profile_template_exists, "The profile.html template is missing from the templates directory.")
        self.assertTrue(home_template_exists, "The home.html template is missing from the templates directory.")
        self.assertTrue(login_template_exists, "The login.html template is missing from the templates directory.")
@@ -80,4 +78,8 @@ class StructureAndSetupTests(TestCase):
        self.assertTrue(top_images_template_exists, "The top_images.html template is missing from the templates directory.")
        self.assertTrue(upload_template_exists, "The upload.html template is missing from the templates directory.")
 
-
+    def test_forms_exist(self):
+        import imagenest.forms
+        self.assertTrue('LoginForm' in dir(imagenest.forms), "The LoginForm class could not be found in forms.py")
+        self.assertTrue('ImageUploadForm' in dir(imagenest.forms), "The ImageUploadForm class could not be found in forms.py")
+        self.assertTrue('SearchForm' in dir(imagenest.forms), "The SearchForm class could not be found in forms.py")
