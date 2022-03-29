@@ -146,18 +146,30 @@ def suggest_users(username_input):
     #suggests users for the search based on the usernames in the database
     similar_users = set()
 
-    if username_input is not None:
+    if len(username_input) == 1:
+        new_similar_users = find_similar_users(username_input)
+        similar_users = similar_users.union(new_similar_users)
+
+    elif username_input is not None:
         for counter in range(1, len(username_input)):
             # remove the last letter of the username on each iteration
-            shortened_username = username_input[:-counter] 
+            shortened_username = username_input[:-counter]
 
-             # check whether another username starts with the same string
-            users_found = User.objects.filter(username__startswith=shortened_username)
-            for user in users_found:
-                # add each returned to a set to ensure there are no duplicates
-                similar_users.add(user.username)
+            # add similar users to set
+            new_similar_users = find_similar_users(shortened_username)
+            similar_users = similar_users.union(new_similar_users)
 
-    return list(similar_users) # return the set as a list
+    return list(similar_users)[::-1] # return the set as a list in reverse order
+
+def find_similar_users(username):
+    similar_users = set() # use set to avoid duplicated data
+    
+    # add each username that starts with the same string to the set
+    users_found = User.objects.filter(username__startswith=username)
+    for user in users_found:
+        similar_users.add(user.username)
+
+    return similar_users
 
 @login_required
 def add_picture(request):
