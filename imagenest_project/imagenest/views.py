@@ -1,21 +1,13 @@
-from http import HTTPStatus
-
 from django.contrib import auth
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import password_validation
-from django.utils.decorators import method_decorator
-from django.views import View
 from django.views.decorators.csrf import csrf_protect
-from django.views.decorators.http import (require_GET, require_http_methods, require_POST, require_safe)
 from django.http import HttpResponseRedirect
-from imagenest import views
 from .forms import ImageUploadForm, LoginForm, RegisterForm, SearchForm
-from .models import Image, Like, Submission
+from .models import Image
 
 
 @csrf_protect
@@ -27,6 +19,7 @@ def login(request):
         login_form = LoginForm(request.POST)
         
         if login_form.is_valid():
+            ## retrieve values from form
             username = request.POST.get('username')
             password = request.POST.get('password')
 
@@ -35,22 +28,22 @@ def login(request):
                 user = auth.authenticate(request, username=username, password=password)
                 if user: # if user is successfully authenticated
 
-                    if user.is_active:
+                    if user.is_active: # if user is active log them in and redirect to home page
                         auth.login(request, user)
                         return redirect(home)
-                    else:
+                    else: # otherwise set an error message to display in template
                         context_dict['error'] = "The account is inactive. Please try a different one." 
 
-                else: # otherwise if password does not match username 
+                else: # otherwise if password does not match username, set an error message to display in template
                     context_dict['error'] = "Password is incorrect. Please try again."
             
-            else: # otherwise if username is not recognised
+            else: # otherwise if username is not recognised, set an error message to display in template
                 context_dict['error'] = "Username not recognised. Please try again."
             
-
     return render(request, "imagenest/login.html", context_dict)
 
 
+## allows a user to create an account and ensures their data is valid
 def register(request):
     register_form = RegisterForm()
     context_dict = {"register_form": register_form}
@@ -58,41 +51,33 @@ def register(request):
     if request.method == 'POST':
         register_form = RegisterForm(request.POST)
 
-        firstname = request.POST.get('firstname')
-        surname =  request.POST.get('surname')
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
-
         if register_form.is_valid():
+            ## retieve values from the form
             firstname = request.POST.get('firstname')
             surname =  request.POST.get('surname')
             username = request.POST.get('username')
             password = request.POST.get('password')
             confirm_password = request.POST.get('confirm_password')
 
+            ## if details are invalid, add an error to context_dict to display in the template
             registration_error = validate_registration(firstname, surname, username, password, confirm_password)
             if registration_error:
                 context_dict["error"] = registration_error
             
+            ## if details are not invalid, save the user and redirect to the login page
             else:
                 user = register_form.save(commit=False)
                 user.set_password(password)
                 user.save()
                 return redirect(login)
-
-            return render(request, "imagenest/register.html", context_dict)
         
         else:
-            error = list(register_form.errors.values())[0][0]
-            if error == "Enter a valid username. This value may contain only letters, numbers, and @/./+/-/_ characters.":
-                error = "Username may contain only alphabetical characters, numbers, and @/./+/-/_ characters. Please try again."
-            context_dict["error"] = error
-
+            context_dict["error"] = list(register_form.errors.values())[0][0]
 
     return render(request, "imagenest/register.html", context_dict)
 
 
+## helper function to validate registration
 def validate_registration(firstname, surname, username, password, confirm_password):
 
     ## check firstname and username contain only letters
@@ -110,7 +95,6 @@ def validate_registration(firstname, surname, username, password, confirm_passwo
     elif not any(char.isalpha() for char in username):
         return "Username must contain at least one alphabetical characters. Please try again."
 
-
     ## check two passwords match, and the password is strong
     if password != confirm_password:
         return "Passwords do not match. Please try again."
@@ -121,16 +105,17 @@ def validate_registration(firstname, surname, username, password, confirm_passwo
         return list(exception)[0] # return the exception
 
 
+## logs a user out and redirects them to the homepage
 def logout(request):
     auth.logout(request)
     return redirect(login)
 
 
+## shows the images uploaded by the user, or if the user does not exist an error
 @login_required
 def profile(request, user):
     try:
         profile = User.objects.get(username=user)
-        #profile_image = profile.profile_image
         images = Image.objects.all().filter(username=profile).order_by("-creation_time")
         error = None
     except User.DoesNotExist:
@@ -143,20 +128,18 @@ def profile(request, user):
         "profile" : profile,
         "error" : error,
         }
+
     return render(request, "imagenest/profile.html", context_dict)
 
 
+## shows the top 10 most liked images in order of those with the most likes
 @login_required
 def top_images(request):
-    #order_by seems to work now, there was a discrepency with likes and likers which
-    #is now fixed
     images = sorted(Image.objects.all()[:10], key=lambda image: image.num_likes, reverse=True)
-
-    context = {'images' : images,}
-
-    return render(request, "imagenest/top_images.html",  context)
+    return render(request, "imagenest/top_images.html",  {'images' : images,})
 
 
+## allows user to search for another user using SearchForm, also suggests possible similar usernames
 @login_required
 def search(request):
     # set up the context_dict with default values
@@ -184,15 +167,16 @@ def search(request):
     return render(request, "imagenest/search.html", context_dict)
 
 
+## helper function that returns a list similar users from most to least relevant
 def suggest_users(username_input):
-    #suggests users for the search based on the usernames in the database
-    similar_users = set()
+    similar_users = set()  # use set to avoid duplicated data
 
-    if len(username_input) == 1:
+    if len(username_input) == 1: # if username is one character
+        # add similar users to set
         new_similar_users = find_similar_users(username_input)
         similar_users = similar_users.union(new_similar_users)
 
-    elif username_input is not None:
+    elif username_input is not None: # if username is longer than one character
         for counter in range(1, len(username_input)):
             # remove the last letter of the username on each iteration
             shortened_username = username_input[:-counter]
@@ -204,8 +188,9 @@ def suggest_users(username_input):
     return list(similar_users)[::-1] # return the set as a list in reverse order
 
 
+## helper function to create set of similar users given shortened username
 def find_similar_users(username):
-    similar_users = set() # use set to avoid duplicated data
+    similar_users = set()
     
     # add each username that starts with the same string to the set
     users_found = User.objects.filter(username__startswith=username)
@@ -214,6 +199,8 @@ def find_similar_users(username):
 
     return similar_users
 
+
+## user can upload a picture using ImageUploadForm as either a url or a picture file
 @login_required
 def add_picture(request):
     uploader = request.user
@@ -222,6 +209,7 @@ def add_picture(request):
 
     if request.method == "POST":
         upload_form = ImageUploadForm(request.POST, request.FILES)
+
         if upload_form.is_valid():
             upload_form.save(commit=False)
             image_url = upload_form.cleaned_data.get("image_url")
@@ -232,33 +220,32 @@ def add_picture(request):
             if (len(image_url) > 0) and (image_file is not None):
                 context['error_message'] = "Please specify only one way to upload an image."
                 
-            # if user entered invlaid image url:
+            # if user entered invalid image url
             elif (len(image_url) > 0) and (not image_url.endswith(("jpeg", "jpg", "gif", "png", "apng", "svg", "bmp", "webp"))):
                 context['error_message'] = "The url is not an image. It must end with jpeg, jpg, gif, png, apng, svg, bmp, or webp."
                 
+            # if image was entered correctly
             elif (len(image_url) > 0) or (image_file is not None):
                 uploaded_image = Image.objects.create(username=uploader, url=image_url, file=image_file, caption=image_caption)
                 uploaded_image.save()
                 return redirect(home)
             
+            # if user specified neither url or file
             else:
                 context['error_message'] = "Please enter a URL or upload a file then try again."
 
     return render(request, "imagenest/upload.html", context)
 
 
+## displays all images registered to a user, in order of decreasing creation time
 @login_required
 def home(request):    
     images = Image.objects.all().order_by("-creation_time")
     user = request.user
-
-    context = {
-        'images': images,
-        'user': user
-    }
-    return render(request, "imagenest/home.html", context)
+    return render(request, "imagenest/home.html", {'images': images, 'user': user})
     
 
+## like / unlike an image by adding / removing the user from image's list of likers
 @login_required
 def like_image(request):
     user = request.user

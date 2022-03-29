@@ -1,7 +1,6 @@
 # this file can be put inside models.py but put it separate make the project tidier
 from django import forms
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
 from .models import Submission
 
 USERNAME_MAX_LENGTH = 15
@@ -14,6 +13,7 @@ class LoginForm(forms.Form):
         label="username",
         max_length=USERNAME_MAX_LENGTH,
         widget=forms.TextInput(
+            # defines how username field will be displayed on template
             attrs={"placeholder": "Username", "class": "form-control"}
         ),
     )
@@ -23,12 +23,13 @@ class LoginForm(forms.Form):
         min_length=PASSWORD_MIN_LENGTH,
         max_length=PASSWORD_MAX_LENGTH,
         widget=forms.PasswordInput(
+            # defines how password field will be displayed on template
             attrs={"placeholder": "Password", "class": "form-control"}
         ),
     )
 
     class Meta:
-        model = User
+        model = User # login form is linked to a user object
         fields = ["username", "password",]
 
 
@@ -38,48 +39,58 @@ class RegisterForm(forms.ModelForm):
         label="First name",
         max_length=USERNAME_MAX_LENGTH,
         widget=forms.TextInput(
+            # defines how first name field will be displayed on template
             attrs={"placeholder": "First name", "class": "form-control"}
         ),
     )
+
     surname = forms.CharField(
         label="Last name",
         max_length=USERNAME_MAX_LENGTH,
         widget=forms.TextInput(
+            # defines how surname field will be displayed on template
             attrs={"placeholder": "Surname", "class": "form-control"}
         ),
     )
+
     username = forms.CharField(
         label="Username",
         max_length=USERNAME_MAX_LENGTH,
         widget=forms.TextInput(
+            # defines how username field will be displayed on template
             attrs={"placeholder": "Username", "class": "form-control"}
         ),
     )
+
     password = forms.CharField(
         label="New Password",
         min_length=PASSWORD_MIN_LENGTH,
         max_length=PASSWORD_MAX_LENGTH,
         widget=forms.PasswordInput(
+            # defines how password field will be displayed on template
             attrs={"placeholder": "New password", "class": "form-control"}
         ),
     )
+
     confirm_password = forms.CharField(
         label="Confirm Password",
         min_length=PASSWORD_MIN_LENGTH,
         max_length=PASSWORD_MAX_LENGTH,
         widget=forms.PasswordInput(
+            # defines how confirm password field will be displayed on template
             attrs={"placeholder": "Confirm password", "class": "form-control"}
         ),
     )
 
     class Meta:
-        model = User
+        model = User # registration form is linked to User model
         fields = [
             "firstname",
             "surname",
             "username",
             "password",
             "confirm_password" ]
+        
         
 class ImageUploadForm(forms.ModelForm):
     image_url = forms.URLField(widget=forms.TextInput(attrs={"placeholder": "Image URL"}), required=False)
@@ -93,13 +104,16 @@ class ImageUploadForm(forms.ModelForm):
             visible.field.widget.attrs['class'] = 'form-control'
     
     class Meta:
-        model = Submission
+        model = Submission # links ImageUploadForm to Submission model
         fields = ['image_url', 'image_file', 'image_caption']
 
+
 class SearchForm(forms.ModelForm):
-    username = forms.CharField(max_length=128, 
-                               widget=forms.TextInput(attrs={"placeholder": "Username", "class": "form-control"}), )
+    username = forms.CharField(max_length=USERNAME_MAX_LENGTH, 
+                               widget=forms.TextInput(
+                                   # defines how field will be displayed on template
+                                   attrs={"placeholder": "Username", "class": "form-control"}), )
 
     class Meta:
-        model = User
+        model = User # links SearchForm to user model
         fields = ["username"]

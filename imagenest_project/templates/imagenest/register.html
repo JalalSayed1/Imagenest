@@ -5,13 +5,13 @@
 {% block form_block %}
 
 {% for hidden in register_form.hidden_fields %}
-{{hidden}}
+    {{ hidden }}
 {% endfor %}
 
 {% for field in register_form.visible_fields %}
-{{ field.errors }}
-{{ field.help_text }}
-{{ field }}
+    {{ field.errors }}
+    {{ field.help_text }}
+    {{ field }}
 {% endfor %}
 
 
