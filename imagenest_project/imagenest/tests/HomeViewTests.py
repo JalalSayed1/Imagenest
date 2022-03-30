@@ -1,5 +1,3 @@
-
-
 from django.urls import reverse, resolve
 from imagenest.views import home
 from imagenest.models import Image, User
@@ -16,10 +14,6 @@ class HomeViewTests(TestCase):
     def test_home_view_status_code(self):
         response = self.client.get(self.home_url)
         self.assertEquals(response.status_code, 200)
-
-    def test_home_view_template(self):
-        response = self.client.get(self.home_url)
-        self.assertTemplateUsed(response, 'imagenest/menu_pages_template.html')
 
     def test_home_view_url_resolves_home_view(self):
         view = resolve(self.home_url)

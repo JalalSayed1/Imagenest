@@ -13,7 +13,7 @@ from .models import Image
 @csrf_protect
 def login(request):
     login_form = LoginForm()
-    context_dict = {"login_form": login_form}
+    context_dict = {}
     
     if request.method == "POST":
         login_form = LoginForm(request.POST)
@@ -40,6 +40,7 @@ def login(request):
             else: # otherwise if username is not recognised, set an error message to display in template
                 context_dict['error'] = "Username not recognised. Please try again."
             
+    context_dict["login_form"] = login_form
     return render(request, "imagenest/login.html", context_dict)
 
 
@@ -87,13 +88,11 @@ def validate_registration(firstname, surname, username, password, confirm_passwo
     elif not surname.isalpha():
         return "Surname must contain only alphabetical characters."
 
-    # check username does not contain a space, does contain a letter, and is longer than 6 characters
+    # check username does not contain a space, and is longer than 6 characters
     elif User.objects.filter(username=username).exists():
         return "Username already registered. Please try again."
     elif len(username) < 6:
         return "Username must be at least 6 characters long. Please try again."
-    elif not any(char.isalpha() for char in username):
-        return "Username must contain at least one alphabetical characters. Please try again."
 
     ## check two passwords match, and the password is strong
     if password != confirm_password:
@@ -205,7 +204,7 @@ def find_similar_users(username):
 def add_picture(request):
     uploader = request.user
     upload_form = ImageUploadForm()
-    context = {'upload_form' : upload_form, "uploader" : uploader}
+    context = {"uploader" : uploader}
 
     if request.method == "POST":
         upload_form = ImageUploadForm(request.POST, request.FILES)
@@ -234,6 +233,7 @@ def add_picture(request):
             else:
                 context['error_message'] = "Please enter a URL or upload a file then try again."
 
+    context["upload_form"] = upload_form
     return render(request, "imagenest/upload.html", context)
 
 
