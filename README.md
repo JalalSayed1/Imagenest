@@ -5,6 +5,21 @@ Web App Dev's team project in Level 2 - semester 2
 ## External sources used:
 - [Bootstrap](https://getbootstrap.com/)
 
+## How to use:
+Using terminal line:
+- Navigate to project location (folder where manage.py is located): `cd <Workspace>`
+- Install project requirements in your machine or in a virtaul enviroment: `pip install -r requirements.txt`
+
+Then you have 2 options:
+- Make migrations and create new database: `python manage.py makemigrations imagenest && python manage.py migrate` ; or
+- Run population script and populate the project with some predefined users and images data: `pyhton populate_imagenest.py`
+
+Then, to run the project:
+```
+python manage.py runserver
+```
+To create a super user: `python manage.py createsuperuser`
+
 ## App overview:
 - The app will allow registered users to upload, like, and view images like a social media application.
 - Any user must create an account and be logged in to use the app.
