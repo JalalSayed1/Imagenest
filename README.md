@@ -12,7 +12,7 @@ Using terminal line:
 
 Then you have 2 options:
 - Make migrations and create new database: `python manage.py makemigrations imagenest && python manage.py migrate` ; or
-- Run population script and populate the project with some predefined users and images data: `pyhton populate_imagenest.py`
+- Run population script and populate the project with some predefined users and images data: `python populate_imagenest.py`
 
 Then, to run the project:
 ```
