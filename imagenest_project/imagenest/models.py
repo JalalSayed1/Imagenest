@@ -37,15 +37,3 @@ class Like(models.Model):
 
     def __str__(self):
         return f"{self.image}'s like"
-        
-
-class Submission(models.Model):
-    image = models.ForeignKey(Image, on_delete=models.CASCADE)
-    uploader = models.ForeignKey(User, on_delete=models.CASCADE)
-    creation_time = models.DateTimeField(auto_now_add=True)
-
-    like_count = models.PositiveIntegerField(default=0)
-    likers = models.ManyToManyField(User, related_name="favorites")
-
-    class Meta:
-        ordering = ['-creation_time']

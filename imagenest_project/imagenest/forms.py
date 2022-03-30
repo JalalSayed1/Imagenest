@@ -1,7 +1,7 @@
 # this file can be put inside models.py but put it separate make the project tidier
 from django import forms
 from django.contrib.auth.models import User
-from .models import Submission
+from .models import Image
 
 USERNAME_MAX_LENGTH = 15
 PASSWORD_MIN_LENGTH = 6
@@ -104,7 +104,7 @@ class ImageUploadForm(forms.ModelForm):
             visible.field.widget.attrs['class'] = 'form-control'
     
     class Meta:
-        model = Submission # links ImageUploadForm to Submission model
+        model = Image # links ImageUploadForm to Image model
         fields = ['image_url', 'image_file', 'image_caption']
 
 
