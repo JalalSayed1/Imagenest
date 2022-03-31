@@ -101,12 +101,13 @@
   font-size: 16px;
 }
 
+.logo-text:hover {
+  text-shadow: var(--main-color) 3px 12px;
+  text-decoration: none;
+  transition: all 500ms ease-in-out;
+}
+
 #like_btn:hover, #like_btn:focus {
   animation: pulse 2s infinite;
   cursor: default;
-}
-
-#logo-text:hover {
-  text-shadow: var(--main-color) 3px 12px;
-  transition: all 500ms linear;
 }
