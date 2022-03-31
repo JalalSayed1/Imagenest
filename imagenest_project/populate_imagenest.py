@@ -12,20 +12,20 @@ def populate():
     users = [
         {'firstname': 'John', 
          'surname': 'Clark',
-         'username': 'john1',
-         'password': '123456'},
+         'username': 'john12',
+         'password': 'fRz4FqXN'},
         {'firstname': 'Kate',
          'surname': 'Smith',
          'username': 'ksmith',
-         'password': 'I_am_Kate_Smith#123456'},
+         'password': '6qzH6ZkP'},
         {'firstname': 'Lisa',
          'surname': 'Owen',
          'username': 'liow123',
          'password': 'MyP@$$W0rd'},
         {'firstname': 'Joe',
          'surname': 'Doe',
-         'username': 'jdjd',
-         'password': 'abcdefg'},
+         'username': 'jdjdjd',
+         'password': 'XkNcPN9w'},
         {'firstname': 'Xinyu',
          'surname': 'Hu',
          'username': 'this_is_hu',
@@ -33,43 +33,43 @@ def populate():
         {'firstname': 'Nakago',
          'surname': 'Mirakasa',
          'username': 'na1mi2',
-         'password': 'nothing'},
+         'password': 'jFL39asM'},
         ]
 
     # images to store on the database
     images = [
-        {'url':'https://images.unsplash.com/photo-1624965085151-0710f6b3f284',
-         'username':'john1',
-         'likers': ['ksmith', 'na1mi2', 'jdjd'],
-         'caption': 'test'},
-        {'url':'https://images.unsplash.com/photo-1572091574819-ea8bb5394b1d',
-         'username':'john1',
-         'likers': ['jdjd'],
-         'caption': 'test'},
-        {'url':'https://images.unsplash.com/photo-1640622660721-45b83554ab05',
+        {'url':'https://images.unsplash.com/photo-1506953823976-52e1fdc0149a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8YmVhY2h8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60',
+         'username':'john12',
+         'likers': ['ksmith', 'na1mi2', 'jdjdjd'],
+         'caption': 'beach picture'},
+        {'url':'https://media.istockphoto.com/photos/stairway-in-the-modern-house-picture-id180898431?k=20&m=180898431&s=612x612&w=0&h=sGZfXkHC0sNaCqWK3jEugtkvRRekFAtwqiCX3m7cWaA=',
+         'username':'john12',
+         'likers': ['jdjdjd'],
+         'caption': 'staircase picture'},
+        {'url':'https://media.istockphoto.com/photos/mother-and-daughter-planting-flowers-in-garden-picture-id1310289685?b=1&k=20&m=1310289685&s=170667a&w=0&h=awgQaam_0pIb6zQajnnJxcQjRoayckR5rrCPr1vopmU=',
          'username':'ksmith',
          'likers': [],
-         'caption': 'test'},
-        {'url':'https://images.unsplash.com/photo-1647471641611-908659d7b366',
+         'caption': 'family picture'},
+        {'url':'https://media.istockphoto.com/photos/cherry-blossom-picture-id1297835513?b=1&k=20&m=1297835513&s=170667a&w=0&h=Buazol-go5ErQbU7BFG04SZCgMyYiDjZ58uadIvPZ7k=',
          'username':'ksmith',
-         'likers': ['john1','liow123','jdjd','this_is_hu','na1mi2'],
-         'caption': 'test'},
-        {'url':'https://images.unsplash.com/photo-1647514422086-18cde746fa26',
-         'username':'john1',
-         'likers': ['jdjd','this_is_hu'],
-         'caption': 'test'},
-        {'url':'https://images.unsplash.com/photo-1647363542902-9b76666d88b3',
+         'likers': ['john12','liow123','jdjdjd','this_is_hu','na1mi2'],
+         'caption': 'flower picture'},
+        {'url':'https://media.istockphoto.com/photos/chef-preparing-vegan-tacos-picture-id1241878649?k=20&m=1241878649&s=612x612&w=0&h=T0Iuh5OnRj7p0hdYpoVnRmsR09thoJNoW8lbUoQAlcg=',
+         'username':'john12',
+         'likers': ['jdjdjd','this_is_hu'],
+         'caption': 'food picture'},
+        {'url':'https://media.istockphoto.com/photos/wooden-tables-and-chairs-of-an-open-air-chinese-traditional-tea-house-picture-id1273316830?k=20&m=1273316830&s=612x612&w=0&h=316H3aSTq1tnhQ4b_8RlgNionS7LTklCXhkuKnBpGgc=',
          'username':'this_is_hu',
-         'likers': ['jdjd','this_is_hu', 'liow123'],
-         'caption': 'test'},
-        {'url':'https://images.unsplash.com/photo-1647482290110-df9a2895cb95',
+         'likers': ['jdjdjd','this_is_hu', 'liow123'],
+         'caption': 'table picture'},
+        {'url':'https://media.istockphoto.com/photos/oceanus-in-the-trevi-fountain-of-rome-picture-id1314485873?k=20&m=1314485873&s=612x612&w=0&h=4UaBXYOrVwgSlz_2CDeEqTb97CCEKaaVKC53GtxUtmY=',
          'username':'ksmith',
-         'likers': ['na1mi2','this_is_hu', 'liow123', 'jdjd'],
-         'caption': 'test'},
-        {'url':'https://images.unsplash.com/photo-1640622299541-8c8ab8a098f3',
+         'likers': ['na1mi2','this_is_hu', 'liow123', 'jdjdjd'],
+         'caption': 'statue picture'},
+        {'url':'https://media.istockphoto.com/photos/blank-canvas-on-easel-in-empty-apartment-picture-id1297597669?k=20&m=1297597669&s=612x612&w=0&h=DELcS9RVbHoReLrunYe_nd6FZ2WCY2S8l_m0jshbs1w=',
          'username':'liow123',
          'likers': ['this_is_hu'],
-         'caption': 'test'}
+         'caption': 'blank canvas picture'}
         ]
 
     # add each user to database
@@ -79,11 +79,6 @@ def populate():
     # add each image to database
     for image in images:
         add_image(image['url'], image['username'], image['likers'], image['caption'])
-
-    # prints the image details being added to the database
-    for user in User.objects.all():
-        for image in user.owner.all():
-            print(f'- {user.username}: {image.url}; likers: {image.liker_usernames}')
     
 
 
@@ -100,15 +95,9 @@ def add_user_and_profile(firstname, surname, username, password):
         user = form.save(commit=False)
         user.set_password(password)
         user.save()
-
-    # set user's attributes
-    user.firstname = firstname
-    user.surname = surname
-    user.password = password
-    user.save()
-    
-    return user
-
+        user.firstname = firstname
+        user.surname = surname
+        
 
 def add_image(url, username, likers, caption):
     user = User.objects.get(username=username) # find associated User object
@@ -136,6 +125,5 @@ def add_image(url, username, likers, caption):
 
 
 if __name__ == '__main__':
-    print('Starting Imagenest population script...')
     populate()
 

@@ -81,7 +81,7 @@ class HomeViewTests(TestCase):
         image1 = response.content.decode().find("test_image_1.jpg")
         
         # image 2 should be first:
-        self.assertTrue(image2 < image1)
+        self.assertTrue(image2 > image1)
 
 # helper funcs:
 def add_image_by_url(uploader, image_url):
