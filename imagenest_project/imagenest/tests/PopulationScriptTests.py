@@ -1,6 +1,7 @@
 from django.test import TestCase
-from imagenest.models import UserProfile, Image, Like
+from imagenest.models import Image, Like, User
 from django.contrib.auth.models import User
+from django.contrib import auth
 
 class PopulationScriptTests(TestCase):
 
@@ -17,7 +18,7 @@ class PopulationScriptTests(TestCase):
     def test_num_of_users(self):
         import populate_imagenest
         populate_imagenest.populate()
-        num_of_users = len(UserProfile.objects.all())
+        num_of_users = len(User.objects.all())
         self.assertEquals(num_of_users, 6, f"Expected 6 users to be created. Instead {num_of_users} were.".format(num_of_users=num_of_users))
 
 
@@ -40,16 +41,10 @@ class PopulationScriptTests(TestCase):
             self.check_user_details(firstname, surname, username, password)
 
     def check_user_details(self, expected_firstname, expected_surname, expected_username, expected_password):
-        user = UserProfile.objects.get(username=expected_username)
+        user = User.objects.get(username=expected_username)
 
-        self.assertEquals(user.firstname, expected_firstname, "{username}'s firstname should be '{expected}'. Instead it is '{actual}'.".format(
-            username=user.username, expected=expected_firstname, actual=user.firstname))
-
-        self.assertEquals(user.surname, expected_surname, "{username}'s surname should be '{expected}'. Instead it is '{actual}'.".format(
-            username=user.username, expected=expected_surname, actual=user.surname))
-
-        self.assertEquals(user.password, expected_password, "{username}'s password should be '{expected}'. Instead it is '{actual}'.".format(
-            username=user.username, expected=expected_password, actual=user.password))
+        if not auth.authenticate(username=expected_username, password=expected_password):
+            raise AssertionError(f"Could not log {username} in".format(username=expected_username))
 
 
     def test_images(self):
@@ -93,8 +88,8 @@ class PopulationScriptTests(TestCase):
         
         for expectedImage in expectedImageData:
             caption = expectedImage['caption']
-            url = expectedImage['picture']
-            likes = expectedImage['likes']
+            url = expectedImage['url']
+            likes = len(expectedImage['likers'])
             user = expectedImage['username']
             users_who_liked = expectedImage['likers']
             self.check_image_details(caption, url, likes, user, users_who_liked)
@@ -106,10 +101,10 @@ class PopulationScriptTests(TestCase):
         self.assertEquals(image.username.username, expected_username, "The {caption} should have been uploaded by '{expected}'. Instead it was uploaded by '{actual}'.".format(
             caption=expected_caption, expected=expected_username, actual=image.username.username))
         
-        self.assertEquals(image.likes, expected_likes, "The {caption} should have {expected} likes. Instead it has {actual} likes.".format(
-            caption=expected_caption, expected=expected_likes, actual=image.likes))
+        self.assertEquals(image.num_likes, expected_likes, "The {caption} should have {expected} likes. Instead it has {actual} likes.".format(
+            caption=expected_caption, expected=expected_likes, actual=image.num_likes))
 
-        self.assertEquals(image.likes, expected_likes, "The {caption} should have the caption '{expected}'. Instead the caption is '{actual}'.".format(
+        self.assertEquals(image.caption, expected_caption, "The {caption} should have the caption '{expected}'. Instead the caption is '{actual}'.".format(
             caption=expected_caption, expected=expected_caption, actual=image.caption))
 
         actual_likers = []

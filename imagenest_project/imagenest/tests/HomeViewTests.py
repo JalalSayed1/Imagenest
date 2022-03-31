@@ -11,10 +11,12 @@ class HomeViewTests(TestCase):
         login = self.client.login(username='usernametest', password='passwordtest')
         self.home_url = reverse('home')
     
+    # test that the client request generates a successful status code
     def test_home_view_status_code(self):
         response = self.client.get(self.home_url)
         self.assertEquals(response.status_code, 200)
 
+    # test url pattern resolves to the correct view function
     def test_home_view_url_resolves_home_view(self):
         view = resolve(self.home_url)
         self.assertEquals(view.func, home)
@@ -55,7 +57,7 @@ class HomeViewTests(TestCase):
 
         self.assertEquals(len(response.context['images']), 1)
         self.assertContains(response, "test_image_1.jpg")
-        self.assertContains(response, user.username)
+        self.assertContains(response, user.username,)
 
     def test_home_view_with_multiple_images(self):
         user = User.objects.all()[0]

@@ -15,7 +15,7 @@ class UploadTests(TestCase):
 
     def test_upload_form_exists(self):
         import imagenest.forms
-        self.assertTrue('ImageUploadForm' in dir(imagenest.forms), "The ImageUploadForm class could not be found in forms.py")
+        self.assertTrue('ImageUploadForm' in dir(imagenest.forms))
 
     def test_empty_upload_error(self):
         create_user()
@@ -23,7 +23,7 @@ class UploadTests(TestCase):
 
         request = {}
         response = self.client.get(reverse(add_picture), request, follow=True)
-        self.assertTemplateUsed(response, 'imagenest/upload.html', "The add_picture() view does not return the original form on error")
+        self.assertTemplateUsed(response, 'imagenest/upload.html')
 
     def test_url_upload_error(self):
         create_user()
@@ -32,17 +32,17 @@ class UploadTests(TestCase):
                     'image_caption': 'Google'}
         response = self.client.post(reverse(add_picture), request, follow=True)
 
-        self.assertTemplateUsed(response, 'imagenest/upload.html', "The add_picture() view does not return the original form on error")
+        self.assertTemplateUsed(response, 'imagenest/upload.html')
 
-"""    def test_url_upload_success(self):
+    def test_url_upload_success(self):
         create_user()
         self.client.login(username='Jsmith', password='y36xb9j')
         
         request = {'image_url': 'https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg',
                    'image_caption': 'Landscape'}
         response = self.client.get(reverse(add_picture), request)
-        self.assertTrue(Image.objects.filter(url=request['image_url'], caption=request['image_caption']).exists(), "Added an image using URL but no Image object is created")
-        self.assertRedirects(response, reverse(home)) """
+        self.assertTrue(Image.objects.filter(url=request['image_url'], caption=request['image_caption']).exists())
+        self.assertRedirects(response, reverse(home))
 
 
 

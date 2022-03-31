@@ -12,15 +12,15 @@ class TopImagesViewTests(TestCase):
 
     def test_status_code(self):
         response = self.client.get(self.top_images_url)
-        self.assertEquals(response.status_code, 200, "Client request was unsuccessful")
+        self.assertEquals(response.status_code, 200)
 
     def test_top_images_template(self):
         response = self.client.get(self.top_images_url)
-        self.assertTemplateUsed(response, "imagenest/menu_pages_template.html", "Top images is not linked to the correct template")
+        self.assertTemplateUsed(response, "imagenest/menu_pages_template.html")
 
     def test_url_resolves_view(self):
         view = resolve(self.top_images_url)
-        self.assertEquals(view.func, top_images, "The top images url is not linked to the correct view")
+        self.assertEquals(view.func, top_images)
 
     def test_no_more_than_ten_images(self):
         user = User.objects.all()[0]
@@ -37,7 +37,7 @@ class TopImagesViewTests(TestCase):
         add_image(user, 'https://i.picsum.photos/id/1020/4288/2848.jpg?hmac=Jo3ofatg0fee3HGOliAIIkcg4KGXC8UOTO1dm5qIIPc', 12)
 
         response = self.client.get(self.top_images_url)
-        self.assertEquals(len(response.context["images"]), 10, "Top images displays too many images")
+        self.assertEquals(len(response.context["images"]), 10)
 
     def test_like_ordering(self):
         user = User.objects.all()[0]
@@ -51,7 +51,7 @@ class TopImagesViewTests(TestCase):
         second_image = response.content.decode().find("https://images.unsplash.com/photo-1624965085151-0710f6b3f284")
         third_image = response.content.decode().find("https://images.unsplash.com/photo-1640622660721-45b83554ab05")
 
-        self.assertTrue(first_image < second_image < third_image, "The images are not ordered by their likes correctly")
+        self.assertTrue(first_image < second_image < third_image)
             
 def add_image(user, image_url, likes):
     image = Image.objects.get_or_create(username=user, url=image_url, likes=likes)[0]
